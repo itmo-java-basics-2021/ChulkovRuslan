@@ -26,10 +26,9 @@ public class DatabaseInputStream extends DataInputStream {
      * Читает следующую запись (см {@link DatabaseOutputStream#write(WritableDatabaseRecord)})
      * @return следующую запись, если она существует. {@link Optional#empty()} - если конец файла достигнут
      */
-    public Optional<DatabaseRecord> readDbUnit(long offset) throws IOException{
+    public Optional<DatabaseRecord> readDbUnit() throws IOException{
         try {
             Optional<DatabaseRecord> rec;
-            skip(offset);
 
             int keySize = readInt();
             String keyString = readUTF();

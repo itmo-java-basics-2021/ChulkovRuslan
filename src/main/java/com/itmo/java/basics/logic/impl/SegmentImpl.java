@@ -97,7 +97,8 @@ public class SegmentImpl implements Segment {
             Optional<SegmentOffsetInfo> offset = _segmentIndex.searchForKey(objectKey);
             if (offset.equals(Optional.empty()))
                 throw new IOException("offset not set");
-            Optional<DatabaseRecord> value = DataReader.readDbUnit(offset.get().getOffset());
+            DataReader.skip(offset.get().getOffset());
+            Optional<DatabaseRecord> value = DataReader.readDbUnit();
             if (value.equals(Optional.empty()))
                 throw new IOException("value is not present");
 
@@ -133,7 +134,8 @@ public class SegmentImpl implements Segment {
             if (offset.equals(Optional.empty()))
                 throw new IOException("Offset not set");
 
-            Optional<DatabaseRecord> value = DataReader.readDbUnit(offset.get().getOffset());
+            DataReader.skip(offset.get().getOffset());
+            Optional<DatabaseRecord> value = DataReader.readDbUnit();
             byte[] nullValue = "NULL".getBytes(StandardCharsets.UTF_8);
 
             if (value.equals(Optional.empty()))
