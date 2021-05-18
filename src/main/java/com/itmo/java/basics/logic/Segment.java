@@ -1,5 +1,7 @@
 package com.itmo.java.basics.logic;
 
+import com.itmo.java.basics.exceptions.DatabaseException;
+
 import java.io.IOException;
 import java.util.Optional;
 
@@ -26,7 +28,7 @@ public interface Segment {
      * @return {@code true} - если значение записалось, {@code false} - если нет
      * @throws IOException если произошла ошибка ввода-вывода.
      */
-    boolean write(String objectKey, byte[] objectValue) throws IOException;
+    boolean write(String objectKey, byte[] objectValue) throws IOException, DatabaseException;
 
     /**
      * Считывает значение из сегмента по переданному ключу.
@@ -35,7 +37,7 @@ public interface Segment {
      * @return значение, которое находится по ключу
      * @throws IOException если произошла ошибка ввода-вывода
      */
-    Optional<byte[]> read(String objectKey) throws IOException;
+    Optional<byte[]> read(String objectKey) throws IOException, DatabaseException;
 
     /**
      * Возвращает {@code true} - если данный сегмент открыт только на чтение, {@code false} - если данный сегмент открыт на чтение и запись.
@@ -44,5 +46,5 @@ public interface Segment {
      */
     boolean isReadOnly();
 
-    boolean delete(String objectKey) throws IOException;
+    boolean delete(String objectKey) throws IOException, DatabaseException;
 }

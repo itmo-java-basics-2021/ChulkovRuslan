@@ -1,10 +1,13 @@
 package com.itmo.java.basics.logic.io;
 
+
 import com.itmo.java.basics.logic.WritableDatabaseRecord;
 
 import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Записывает данные в БД
@@ -17,7 +20,7 @@ public class DatabaseOutputStream extends DataOutputStream {
 
     /**
      * Записывает в БД в следующем формате:
-     * - Размер ключа в байтахб используя {@link WritableDatabaseRecord#getKeySize()}
+     * - Размер ключа в байтах используя {@link WritableDatabaseRecord#getKeySize()}
      * - Ключ
      * - Размер записи в байтах {@link WritableDatabaseRecord#getValueSize()}
      * - Запись
@@ -31,6 +34,25 @@ public class DatabaseOutputStream extends DataOutputStream {
      * @throws IOException если запись не удалась
      */
     public int write(WritableDatabaseRecord databaseRecord) throws IOException {
-        return 0;
+        try{
+            int keySize = databaseRecord.getKeySize();
+            writeInt(keySize);
+
+            byte[] key = databaseRecord.getKey();
+            writeUTF(new String(key, StandardCharsets.UTF_8));
+            //write(key, 0, keySize);
+
+            int valueSize = databaseRecord.getValueSize();
+            writeInt(valueSize);
+
+            byte[] value = databaseRecord.getValue();
+            writeUTF(new String(value, StandardCharsets.UTF_8));
+            //write(value, 0, valueSize);
+        }
+        catch(IOException e){
+            throw new IOException("Failed write to file");
+        }
+
+        return (int)databaseRecord.size();
     }
 }
