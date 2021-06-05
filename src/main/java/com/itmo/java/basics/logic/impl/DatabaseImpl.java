@@ -86,7 +86,8 @@ public class DatabaseImpl implements Database {
             throw new DatabaseException("ObjectKey is null");
         }
         if (!_table.containsKey(tableName)) {
-            throw new DatabaseException("Database isn't exist");
+            return Optional.empty();
+            //throw new DatabaseException("Database isn't exist");
         }
 
         return _table.get(tableName).read(objectKey);

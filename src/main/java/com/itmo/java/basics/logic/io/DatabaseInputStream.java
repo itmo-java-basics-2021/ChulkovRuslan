@@ -33,6 +33,8 @@ public class DatabaseInputStream extends DataInputStream {
             int keySize = readInt();
             String keyString = readUTF();
             int valueSize = readInt();
+            if(valueSize == -1)
+                return Optional.empty();
             String valueString = readUTF();
 
             rec = Optional.of(SetDatabaseRecord.create(keyString, valueString.getBytes(StandardCharsets.UTF_8)));

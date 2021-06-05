@@ -99,11 +99,14 @@ public class SegmentImpl implements Segment {
                 throw new IOException("offset not set");
             DataReader.skip(offset.get().getOffset());
             Optional<DatabaseRecord> value = DataReader.readDbUnit();
-            if (value.equals(Optional.empty()))
-                throw new IOException("value is not present");
-
-            String stringValue = new String(value.get().getValue(), StandardCharsets.UTF_8);
-
+            if (value.equals(Optional.empty())){
+                return Optional.empty();
+            }
+            else{
+                String stringValue = new String(value.get().getValue(), StandardCharsets.UTF_8);
+                return Optional.of(value.get().getValue());
+            }
+            /*
             if (stringValue.equals("NULL"))
             {
                 return Optional.empty();
@@ -111,7 +114,7 @@ public class SegmentImpl implements Segment {
             else
             {
                 return Optional.of(value.get().getValue());
-            }
+            }*/
         }catch (IOException e)
         {
             throw new IOException("Cannot read file");
