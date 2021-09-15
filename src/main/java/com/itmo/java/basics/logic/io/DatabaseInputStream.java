@@ -30,11 +30,13 @@ public class DatabaseInputStream extends DataInputStream {
         try {
             Optional<DatabaseRecord> rec;
 
-            int keySize = readInt();
+            byte keySize = readByte();
+            //int keySize = readInt();
             String keyString = new String(readNBytes(keySize), StandardCharsets.UTF_8);
             //String keyString = readUTF();
 
-            int valueSize = readInt();
+            byte valueSize = readByte();
+            //int valueSize = readInt();
             if(valueSize == -1)
                 return Optional.empty();
             String valueString = new String(readNBytes(valueSize), StandardCharsets.UTF_8);

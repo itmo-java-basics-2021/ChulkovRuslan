@@ -30,7 +30,7 @@ public class SetDatabaseRecord implements WritableDatabaseRecord {
 
     @Override
     public long size() {
-        return _key.length() + _value.length + 8;
+        return _key.length() + _value.length + 2;
     }
 
     @Override
