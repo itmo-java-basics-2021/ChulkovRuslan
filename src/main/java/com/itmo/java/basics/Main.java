@@ -4,16 +4,25 @@ import com.itmo.java.basics.exceptions.DatabaseException;
 import com.itmo.java.basics.logic.Database;
 import com.itmo.java.basics.logic.impl.DatabaseImpl;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
 public class Main {
-    public static void main(String[] args) {
-        Path databaseRoot = Paths.get("E:\\IntelliJ IDEA 2020.3.2\\Projects\\databases");
+    public static void main(String[] args) throws IOException {
+        String pathDataBase = "E:\\Projects\\TP\\databases";
+        Path databaseRoot = Paths.get(pathDataBase);
+        File file = new File(pathDataBase);
+        /*if (file.isDirectory() && !(file.list().length == 0))
+        {
+            file.delete();
+            Files.createDirectory(databaseRoot);
+        }*/
 
         try {
             String persons = "persons";
@@ -23,7 +32,12 @@ public class Main {
             db.createTableIfNotExists(adults);
 
             {
-                byte[] value = "bigBoy".getBytes(StandardCharsets.UTF_8);
+                String fileName = "E:\\Projects\\TP\\databases\\test.txt";
+                Optional<String> line = Files.lines(Paths.get(fileName)).findFirst();
+                byte[] value = line.get().getBytes(StandardCharsets.UTF_8);
+                db.write("children", "BEZM", value);
+
+                value = "bigBoy".getBytes(StandardCharsets.UTF_8);
                 db.write("children", "Ruslan", value);
                 value = "lilsBoy".getBytes(StandardCharsets.UTF_8);
                 db.write("children", "Dima", value);
@@ -37,6 +51,7 @@ public class Main {
                 String answer = new String(nedValue.get(), StandardCharsets.UTF_8);
                 answer = (answer.equals("bigBoy") ? "pass" : "faild");
                 System.out.println(answer);
+
 
                 nedValue = db.read("children", "Dima");
                 answer = new String(nedValue.get(), StandardCharsets.UTF_8);

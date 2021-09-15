@@ -31,11 +31,14 @@ public class DatabaseInputStream extends DataInputStream {
             Optional<DatabaseRecord> rec;
 
             int keySize = readInt();
-            String keyString = readUTF();
+            String keyString = new String(readNBytes(keySize), StandardCharsets.UTF_8);
+            //String keyString = readUTF();
+
             int valueSize = readInt();
             if(valueSize == -1)
                 return Optional.empty();
-            String valueString = readUTF();
+            String valueString = new String(readNBytes(valueSize), StandardCharsets.UTF_8);
+            // String valueString = readUTF();
 
             rec = Optional.of(SetDatabaseRecord.create(keyString, valueString.getBytes(StandardCharsets.UTF_8)));
 

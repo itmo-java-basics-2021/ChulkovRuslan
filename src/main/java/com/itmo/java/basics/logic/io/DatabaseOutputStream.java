@@ -39,15 +39,15 @@ public class DatabaseOutputStream extends DataOutputStream {
             writeInt(keySize);
 
             byte[] key = databaseRecord.getKey();
-            writeUTF(new String(key, StandardCharsets.UTF_8));
-            //write(key, 0, keySize);
+            writeBytes(new String(key, StandardCharsets.UTF_8));
+            //writeUTF(new String(key, StandardCharsets.UTF_8));
 
             int valueSize = databaseRecord.getValueSize();
             writeInt(valueSize);
 
             byte[] value = databaseRecord.getValue();
-            writeUTF(new String(value, StandardCharsets.UTF_8));
-            //write(value, 0, valueSize);
+            writeBytes(new String(value, StandardCharsets.UTF_8));
+            //writeUTF(new String(value, StandardCharsets.UTF_8));
         }
         catch(IOException e){
             throw new IOException("Failed write to file");
@@ -55,4 +55,6 @@ public class DatabaseOutputStream extends DataOutputStream {
 
         return (int)databaseRecord.size();
     }
+
+
 }

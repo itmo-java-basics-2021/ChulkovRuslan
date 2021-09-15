@@ -106,15 +106,6 @@ public class SegmentImpl implements Segment {
                 String stringValue = new String(value.get().getValue(), StandardCharsets.UTF_8);
                 return Optional.of(value.get().getValue());
             }
-            /*
-            if (stringValue.equals("NULL"))
-            {
-                return Optional.empty();
-            }
-            else
-            {
-                return Optional.of(value.get().getValue());
-            }*/
         }catch (IOException e)
         {
             throw new IOException("Cannot read file");
@@ -131,7 +122,6 @@ public class SegmentImpl implements Segment {
         try{
             String segmentFile = _segmentRootPath.toString();
             DataReader = new DatabaseInputStream(new FileInputStream(segmentFile));
-            //DataWriter = new DatabaseOutputStream(new FileOutputStream(segmentFile));
 
             Optional<SegmentOffsetInfo> offset = _segmentIndex.searchForKey(objectKey);
             if (offset.equals(Optional.empty()))
