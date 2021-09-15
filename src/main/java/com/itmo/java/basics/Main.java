@@ -32,12 +32,7 @@ public class Main {
             db.createTableIfNotExists(adults);
 
             {
-                String fileName = "E:\\Projects\\TP\\databases\\test.txt";
-                Optional<String> line = Files.lines(Paths.get(fileName)).findFirst();
-                byte[] value = line.get().getBytes(StandardCharsets.UTF_8);
-                db.write("children", "BEZM", value);
-
-                value = "bigBoy".getBytes(StandardCharsets.UTF_8);
+                byte[] value = "bigBoy".getBytes(StandardCharsets.UTF_8);
                 db.write("children", "Ruslan", value);
                 value = "lilsBoy".getBytes(StandardCharsets.UTF_8);
                 db.write("children", "Dima", value);
@@ -45,6 +40,11 @@ public class Main {
                 db.write("children", "Alex", value);
                 value = "noLimit".getBytes(StandardCharsets.UTF_8);
                 db.write("children", "Alex", value);
+
+                String fileName = "E:\\Projects\\TP\\databases\\test.txt";
+                Optional<String> line = Files.lines(Paths.get(fileName)).findFirst();
+                value = line.get().getBytes(StandardCharsets.UTF_8);
+                db.write("children", "BEZM", value);
 
 
                 Optional<byte[]> nedValue = db.read("children", "Ruslan");
@@ -63,6 +63,8 @@ public class Main {
                 nedValue = db.read("children", "Dima");
                 answer = (nedValue.equals(Optional.empty())) ? "pass" : "fail";
                 System.out.println(answer);
+                value = "lilsBoy".getBytes(StandardCharsets.UTF_8);
+                db.write("children", "Dima", value);
 
                 nedValue = db.read("children", "Alex");
                 answer = new String(nedValue.get(), StandardCharsets.UTF_8);

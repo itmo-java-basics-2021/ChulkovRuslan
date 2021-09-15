@@ -104,8 +104,20 @@ public class TableImpl implements Table {
             throw new DatabaseException("Value by key not found");
         }
         try{
-            _tableIndex.onIndexedEntityUpdated(objectKey, null);
-            segment.get().delete(objectKey);
+            if(_lastSegment.isReadOnly()) {
+                String LastSegmentName = SegmentImpl.createSegmentName(_name);
+                Segment segmentNew = SegmentImpl.create(LastSegmentName, _tableRootPath);
+
+                _lastSegment = segmentNew;
+                _segmentsName.add(segmentNew.getName());
+                _tableIndex.onIndexedEntityUpdated(objectKey, null);
+                segmentNew.delete(objectKey);
+            }
+            else
+            {
+                segment.get().delete(objectKey);
+            }
+
         } catch (IOException e){
             throw new DatabaseException("Cannot delete from file", e);
         }

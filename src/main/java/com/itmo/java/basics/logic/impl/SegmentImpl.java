@@ -60,7 +60,7 @@ public class SegmentImpl implements Segment {
     private WritableDatabaseRecord rec;
 
     private boolean isFull = false;
-    private final int maxSizeSegment = 100000;
+    private final int maxSizeSegment = 99999;
 
     @Override
     public String getName() {
@@ -123,17 +123,17 @@ public class SegmentImpl implements Segment {
             String segmentFile = _segmentRootPath.toString();
             DataReader = new DatabaseInputStream(new FileInputStream(segmentFile));
 
-            Optional<SegmentOffsetInfo> offset = _segmentIndex.searchForKey(objectKey);
-            if (offset.equals(Optional.empty()))
-                throw new IOException("Offset not set");
+            //Optional<SegmentOffsetInfo> offset = _segmentIndex.searchForKey(objectKey);
+            //if (offset.equals(Optional.empty()))
+            //    throw new IOException("Offset not set");
 
-            DataReader.skip(offset.get().getOffset());
-            Optional<DatabaseRecord> value = DataReader.readDbUnit();
+            //DataReader.skip(offset.get().getOffset());
+            //Optional<DatabaseRecord> value = DataReader.readDbUnit();
             byte[] nullValue = "NULL".getBytes(StandardCharsets.UTF_8);
 
-            if (value.equals(Optional.empty()))
-                throw new IOException("value not present");
-            rec = RemoveDatabaseRecord.create(new String(value.get().getKey(), StandardCharsets.UTF_8), nullValue);
+            //if (value.equals(Optional.empty()))
+                //throw new IOException("value not present");
+            rec = RemoveDatabaseRecord.create(objectKey, nullValue);
 
             DataWriter.write(rec);
             File file = new File(_segmentRootPath.toString());
