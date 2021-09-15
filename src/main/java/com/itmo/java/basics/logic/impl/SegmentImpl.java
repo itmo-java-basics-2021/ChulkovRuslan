@@ -85,7 +85,7 @@ public class SegmentImpl implements Segment {
             return true;
         }
         catch (IOException e) {
-            throw new IOException("Canno write in file");
+            throw new IOException("Cannot write in file");
         }
     }
 
