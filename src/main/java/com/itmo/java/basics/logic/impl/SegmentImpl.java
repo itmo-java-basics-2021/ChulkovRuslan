@@ -99,7 +99,7 @@ public class SegmentImpl implements Segment {
                 throw new IOException("offset not set");
             DataReader.skip(offset.get().getOffset());
             Optional<DatabaseRecord> value = DataReader.readDbUnit();
-            if (value.equals(Optional.empty())){
+            if (!value.get().isValuePresented()){
                 return Optional.empty();
             }
             else{
@@ -129,11 +129,11 @@ public class SegmentImpl implements Segment {
 
             //DataReader.skip(offset.get().getOffset());
             //Optional<DatabaseRecord> value = DataReader.readDbUnit();
-            byte[] nullValue = "NULL".getBytes(StandardCharsets.UTF_8);
+            //byte[] nullValue = "NULL".getBytes(StandardCharsets.UTF_8);
 
             //if (value.equals(Optional.empty()))
                 //throw new IOException("value not present");
-            rec = RemoveDatabaseRecord.create(objectKey, nullValue);
+            rec = RemoveDatabaseRecord.create(objectKey);
 
             DataWriter.write(rec);
             File file = new File(_segmentRootPath.toString());

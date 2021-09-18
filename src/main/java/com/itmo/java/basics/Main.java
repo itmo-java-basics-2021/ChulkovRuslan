@@ -41,16 +41,16 @@ public class Main {
                 value = "noLimit".getBytes(StandardCharsets.UTF_8);
                 db.write("children", "Alex", value);
 
-                String bigValue = "E:\\Projects\\TP\\databases\\value.txt";
+                /*String bigValue = "E:\\Projects\\TP\\databases\\value.txt";
                 Optional<String> line = Files.lines(Paths.get(bigValue)).findFirst();
                 value = line.get().getBytes(StandardCharsets.UTF_8);
                 String bigKey = "E:\\Projects\\TP\\databases\\value.txt";
                 line = Files.lines(Paths.get(bigKey)).findFirst();
                 String key = line.get();
-                db.write("children", key, value);
+                db.write("children", key, value);*/
 
-                db.write("children", "w", value);
-                db.write("children", key, value);
+                /*db.write("children", "w", value);
+                db.write("children", key, value);*/
 
 
                 Optional<byte[]> nedValue = db.read("children", "Ruslan");
@@ -64,13 +64,13 @@ public class Main {
                 answer = (answer.equals("lilsBoy") ? "pass" : "faild");
                 System.out.println(answer);
 
-                //db.delete("children", "Dima");
+                db.delete("children", "Dima");
 
-                //nedValue = db.read("children", "Dima");
-                //answer = (nedValue.equals(Optional.empty())) ? "pass" : "fail";
-                //System.out.println(answer);
-                //value = "lilsBoy".getBytes(StandardCharsets.UTF_8);
-                //db.write("children", "Dima", value);
+                nedValue = db.read("children", "Dima");
+                answer = (nedValue.equals(Optional.empty())) ? "pass" : "fail";
+                System.out.println(answer);
+                value = "lilsBoy".getBytes(StandardCharsets.UTF_8);
+                db.write("children", "Dima", value);
 
                 nedValue = db.read("children", "Alex");
                 answer = new String(nedValue.get(), StandardCharsets.UTF_8);

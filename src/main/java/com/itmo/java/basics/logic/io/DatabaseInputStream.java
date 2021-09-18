@@ -3,6 +3,7 @@ package com.itmo.java.basics.logic.io;
 import com.itmo.java.basics.exceptions.DatabaseException;
 import com.itmo.java.basics.logic.DatabaseRecord;
 import com.itmo.java.basics.logic.WritableDatabaseRecord;
+import com.itmo.java.basics.logic.impl.RemoveDatabaseRecord;
 import com.itmo.java.basics.logic.impl.SetDatabaseRecord;
 
 import java.io.DataInputStream;
@@ -37,7 +38,8 @@ public class DatabaseInputStream extends DataInputStream {
             //byte valueSize = readByte();
             int valueSize = readInt();
             if(valueSize == -1)
-                return Optional.empty();
+                return Optional.of(RemoveDatabaseRecord.create(keyString));
+                //return Optional.empty();
             String valueString = new String(readNBytes(valueSize), StandardCharsets.UTF_8);
 
             rec = Optional.of(SetDatabaseRecord.create(keyString, valueString.getBytes(StandardCharsets.UTF_8)));
