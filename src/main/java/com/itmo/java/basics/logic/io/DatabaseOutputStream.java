@@ -35,19 +35,19 @@ public class DatabaseOutputStream extends DataOutputStream {
      */
     public int write(WritableDatabaseRecord databaseRecord) throws IOException {
         try{
-            byte keySize = (byte)databaseRecord.getKeySize();
-            writeByte(keySize);
-            //int keySize = databaseRecord.getKeySize();
-            //writeInt(keySize);
+            //byte keySize = (byte)databaseRecord.getKeySize();
+            //writeByte(keySize);
+            int keySize = databaseRecord.getKeySize();
+            writeInt(keySize);
 
             byte[] key = databaseRecord.getKey();
             writeBytes(new String(key, StandardCharsets.UTF_8));
             //writeUTF(new String(key, StandardCharsets.UTF_8));
 
-            byte valueSize = (byte) databaseRecord.getValueSize();
-            writeByte(valueSize);
-            //int valueSize = databaseRecord.getValueSize();
-            //writeInt(valueSize);
+            //byte valueSize = (byte) databaseRecord.getValueSize();
+            //writeByte(valueSize);
+            int valueSize = databaseRecord.getValueSize();
+            writeInt(valueSize);
 
             byte[] value = databaseRecord.getValue();
             writeBytes(new String(value, StandardCharsets.UTF_8));
