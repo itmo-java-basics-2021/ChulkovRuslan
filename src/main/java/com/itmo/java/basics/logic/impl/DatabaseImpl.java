@@ -74,7 +74,15 @@ public class DatabaseImpl implements Database {
             throw new DatabaseException("Table name is null");
         }
 
-        _table.get(tableName).write(objectKey, objectValue);
+        if (_table.containsKey(tableName))
+        {
+            _table.get(tableName).write(objectKey, objectValue);
+        }
+        else
+        {
+            throw new DatabaseException("Cannot find table name");
+        }
+
     }
 
     @Override
