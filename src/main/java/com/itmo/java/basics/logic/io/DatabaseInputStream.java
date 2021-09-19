@@ -36,7 +36,7 @@ public class DatabaseInputStream extends DataInputStream {
                 return Optional.of(RemoveDatabaseRecord.create(keyString));
             String valueString = new String(readNBytes(valueSize), StandardCharsets.UTF_8);
 
-            Optional<DatabaseRecord> rec = Optional.of(SetDatabaseRecord.create(keyString.getBytes(StandardCharsets.UTF_8), valueString.getBytes(StandardCharsets.UTF_8)));
+            Optional<DatabaseRecord> rec = Optional.of(SetDatabaseRecord.create(keyString, valueString.getBytes(StandardCharsets.UTF_8)));
 
             return rec;
         } catch (IOException e){

@@ -48,7 +48,8 @@ public class TableImpl implements Table {
     @Override
     public void write(String objectKey, byte[] objectValue) throws DatabaseException{
 
-        if(_lastSegment == null || _lastSegment.isReadOnly()) {
+        if(_lastSegment == null || _lastSegment.isReadOnly())
+        {
             createSegment(objectKey, objectValue);
         }
         try
@@ -56,7 +57,8 @@ public class TableImpl implements Table {
             _lastSegment.write(objectKey, objectValue);
             _tableIndex.onIndexedEntityUpdated(objectKey, _lastSegment);
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             throw new DatabaseException("Cannot write in segment", e);
         }
     }

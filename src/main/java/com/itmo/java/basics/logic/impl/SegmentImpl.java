@@ -69,15 +69,14 @@ public class SegmentImpl implements Segment {
     @Override
     public boolean write(String objectKey, byte[] objectValue) throws IOException {
         try{
-            rec = SetDatabaseRecord.create(objectKey.getBytes(StandardCharsets.UTF_8), objectValue);
+            rec = SetDatabaseRecord.create(objectKey, objectValue);
             DataWriter.write(rec);
             File file = new File(_segmentRootPath.toString());
 
             _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(file.length() - rec.size()));
 
-            if (file.length() >= maxSizeSegment){
+            if (file.length() >= maxSizeSegment)
                 isFull = true;
-            }
 
             return true;
         }

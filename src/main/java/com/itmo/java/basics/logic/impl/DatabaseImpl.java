@@ -64,15 +64,15 @@ public class DatabaseImpl implements Database {
 
     @Override
     public void write(String tableName, String objectKey, byte[] objectValue) throws DatabaseException{
-        if (objectKey == null) {
+        /*if (objectKey == null) {
             throw new DatabaseException("Object key is null");
-        }
-        if (objectValue == null) {
+        }*/
+        /*if (objectValue == null) {
             throw new DatabaseException("Object value is null");
-        }
-        if (_table.get(tableName) == null) {
+        }*/
+        /*if (_table.get(tableName) == null) {
             throw new DatabaseException("Table name is null");
-        }
+        }*/
 
         if (_table.containsKey(tableName))
         {

@@ -28,7 +28,7 @@ public class Main {
 
             {
                 byte[] value = "bigBoy".getBytes(StandardCharsets.UTF_8);
-                db.write("children", "Ruslan", value);
+                db.write("children", "Ruslan", null);
                 value = "lilsBoy".getBytes(StandardCharsets.UTF_8);
                 db.write("children", "Dima", value);
                 value = "BIGLILboy".getBytes(StandardCharsets.UTF_8);
