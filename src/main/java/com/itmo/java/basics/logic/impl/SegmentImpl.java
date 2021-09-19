@@ -68,7 +68,8 @@ public class SegmentImpl implements Segment {
 
     @Override
     public boolean write(String objectKey, byte[] objectValue) throws IOException {
-        try{
+        try
+        {
             rec = SetDatabaseRecord.create(objectKey, objectValue);
             DataWriter.write(rec);
             File file = new File(_segmentRootPath.toString());
@@ -80,14 +81,16 @@ public class SegmentImpl implements Segment {
 
             return true;
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             throw new IOException("Cannot write in file");
         }
     }
 
     @Override
     public Optional<byte[]> read(String objectKey) throws IOException {
-        try{
+        try
+        {
             DataReader = new DatabaseInputStream(new FileInputStream(_segmentRootPath.toString()));
             Optional<SegmentOffsetInfo> offset = _segmentIndex.searchForKey(objectKey);
 
@@ -106,7 +109,8 @@ public class SegmentImpl implements Segment {
                 //String stringValue = new String(value.get().getValue(), StandardCharsets.UTF_8);
                 return Optional.ofNullable(value.get().getValue());
             }
-        }catch (IOException e)
+        }
+        catch (IOException e)
         {
             throw new IOException("Cannot read file");
         }
@@ -119,7 +123,8 @@ public class SegmentImpl implements Segment {
 
     @Override
     public boolean delete(String objectKey) throws IOException {
-        try{
+        try
+        {
             String segmentFile = _segmentRootPath.toString();
             DataReader = new DatabaseInputStream(new FileInputStream(segmentFile));
 
@@ -135,34 +140,10 @@ public class SegmentImpl implements Segment {
             }
 
             return true;
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             throw new IOException("Cannot delete from file");
-            //return false;
         }
     }
 }
-/*
-update
-try{
-            if (objectKey == null) {
-                throw new IOException("objectKey is null");
-            }
-            Optional<SegmentOffsetInfo> offset = _segmentIndex.searchForKey(objectKey);
-            Optional<DatabaseRecord> value = DataReader.readDbUnit(offset.get().getOffset());
-            rec = RemoveDatabaseRecord.create(new String(value.get().getKey(), StandardCharsets.UTF_8), value.get().getValue());
-
-            DataWriter.write(rec);
-            File file = new File(_segmentRootPath.toString());
-
-            _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(file.length() - rec.size()));
-
-            if (file.length() >= maxSizeSegment){
-                isFull = true;
-            }
-
-            return true;
-        } catch (IOException e) {
-
-            return false;
-        }
- */

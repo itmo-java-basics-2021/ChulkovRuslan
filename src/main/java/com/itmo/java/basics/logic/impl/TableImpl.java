@@ -101,9 +101,30 @@ public class TableImpl implements Table
     }
 
     @Override
-    public void delete(String objectKey) throws DatabaseException
-    {
-        Optional<Segment> segment = _tableIndex.searchForKey(objectKey);
+    public void delete(String objectKey) throws DatabaseException {
+        try
+        {
+            if (_lastSegment.isReadOnly() || _lastSegment == null)
+            {
+                String LastSegmentName = SegmentImpl.createSegmentName(_name);
+                Segment segmentNew = SegmentImpl.create(LastSegmentName, _tableRootPath);
+
+                _lastSegment = segmentNew;
+                _segmentsName.add(segmentNew.getName());
+                _tableIndex.onIndexedEntityUpdated(objectKey, null);
+                segmentNew.delete(objectKey);
+            }
+            else
+            {
+                _lastSegment.delete(objectKey);
+            }
+        }
+        catch(IOException e)
+        {
+            throw new DatabaseException("Cannot delete from file", e);
+        }
+
+        /*Optional<Segment> segment = _tableIndex.searchForKey(objectKey);
         if (segment.equals(Optional.empty()))
         {
             throw new DatabaseException("Value by key not found");
@@ -128,6 +149,6 @@ public class TableImpl implements Table
         } catch (IOException e)
         {
             throw new DatabaseException("Cannot delete from file", e);
-        }
+        }*/
     }
 }
