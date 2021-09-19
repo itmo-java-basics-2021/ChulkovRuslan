@@ -55,12 +55,13 @@ public class TableImpl implements Table {
         try
         {
             _lastSegment.write(objectKey, objectValue);
-            _tableIndex.onIndexedEntityUpdated(objectKey, _lastSegment);
         }
         catch (IOException e)
         {
             throw new DatabaseException("Cannot write in segment", e);
         }
+
+        _tableIndex.onIndexedEntityUpdated(objectKey, _lastSegment);
     }
 
     private void createSegment(String objectKey, byte[] objectValue) throws DatabaseException{
