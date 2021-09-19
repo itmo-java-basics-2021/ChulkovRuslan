@@ -15,22 +15,26 @@ import java.util.Optional;
 
 public class DatabaseImpl implements Database {
     public static Database create(String dbName, Path databaseRoot) throws DatabaseException {
-        if (dbName == null) {
+        if (dbName == null)
+        {
             throw new DatabaseException("Name is null");
         }
 
-        if (databaseRoot == null){
+        if (databaseRoot == null)
+        {
             throw new DatabaseException("databaseRoot is null");
         }
 
         return new DatabaseImpl(dbName, databaseRoot);
     }
 
-    private DatabaseImpl(String dbName, Path databaseRoot) throws DatabaseException {
+    private DatabaseImpl(String dbName, Path databaseRoot) throws DatabaseException
+    {
         _name = dbName;
         _databaseRoot = databaseRoot.resolve(dbName);
 
-        try {
+        try
+        {
             Files.createDirectory(_databaseRoot);
         } catch (IOException e) {
             throw new DatabaseException("Cannot create directory for database",e);
@@ -47,13 +51,16 @@ public class DatabaseImpl implements Database {
     }
 
     @Override
-    public void createTableIfNotExists(String tableName) throws DatabaseException {
-        if (tableName == null){
+    public void createTableIfNotExists(String tableName) throws DatabaseException
+    {
+        if (tableName == null)
+        {
             throw new DatabaseException("TableName is null");
         }
 
         Path tableRoot = _databaseRoot.resolve(tableName);
-        try {
+        try
+        {
             Files.createDirectory(tableRoot);
         } catch (IOException e) {
             throw new DatabaseException("Cannot create directory table",e);
@@ -63,16 +70,8 @@ public class DatabaseImpl implements Database {
     }
 
     @Override
-    public void write(String tableName, String objectKey, byte[] objectValue) throws DatabaseException{
-        /*if (objectKey == null) {
-            throw new DatabaseException("Object key is null");
-        }*/
-        /*if (objectValue == null) {
-            throw new DatabaseException("Object value is null");
-        }*/
-        /*if (_table.get(tableName) == null) {
-            throw new DatabaseException("Table name is null");
-        }*/
+    public void write(String tableName, String objectKey, byte[] objectValue) throws DatabaseException
+    {
 
         if (_table.containsKey(tableName))
         {
@@ -86,30 +85,27 @@ public class DatabaseImpl implements Database {
     }
 
     @Override
-    public Optional<byte[]> read(String tableName, String objectKey) throws DatabaseException {
-        if (tableName == null){
-            throw new DatabaseException("Tablename is null");
+    public Optional<byte[]> read(String tableName, String objectKey) throws DatabaseException
+    {
+        if (_table.containsKey(tableName))
+        {
+            return _table.get(tableName).read(objectKey);
         }
-        if (objectKey == null) {
-            throw new DatabaseException("ObjectKey is null");
+        else
+        {
+            throw new DatabaseException("Table not found");
         }
-        if (!_table.containsKey(tableName)) {
-            return Optional.empty();
-            //throw new DatabaseException("Database isn't exist");
-        }
-
-        return _table.get(tableName).read(objectKey);
     }
 
     @Override
     public void delete(String tableName, String objectKey) throws DatabaseException{
-        if (tableName == null){
-            throw new DatabaseException("TableName is null");
+        if (_table.containsKey(tableName))
+        {
+            _table.get(tableName).delete(objectKey);
         }
-        if (objectKey == null){
-            throw  new DatabaseException("ObjectKey is null");
+        else
+        {
+            throw new DatabaseException("Table not find");
         }
-
-        _table.get(tableName).delete(objectKey);
     }
 }

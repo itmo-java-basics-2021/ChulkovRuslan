@@ -27,8 +27,10 @@ public class Main {
             db.createTableIfNotExists(adults);
 
             {
+                Optional<byte[]> nedValue = db.read("children", "Ruslan");
+
                 byte[] value = "bigBoy".getBytes(StandardCharsets.UTF_8);
-                db.write("children", "Ruslan", null);
+                db.write("children", "Ruslan", value);
                 value = "lilsBoy".getBytes(StandardCharsets.UTF_8);
                 db.write("children", "Dima", value);
                 value = "BIGLILboy".getBytes(StandardCharsets.UTF_8);
@@ -47,8 +49,7 @@ public class Main {
                 /*db.write("children", "w", value);
                 db.write("children", key, value);*/
 
-
-                Optional<byte[]> nedValue = db.read("children", "Ruslan");
+                nedValue = db.read("children", "Ruslan");
                 String answer = new String(nedValue.get(), StandardCharsets.UTF_8);
                 answer = (answer.equals("bigBoy") ? "pass" : "faild");
                 System.out.println(answer);

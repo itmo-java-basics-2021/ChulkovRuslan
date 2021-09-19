@@ -12,13 +12,17 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 
-public class TableImpl implements Table {
-    static Table create(String tableName, Path pathToDatabaseRoot, TableIndex tableIndex) throws DatabaseException {
-        if (tableIndex == null){
+public class TableImpl implements Table
+{
+    static Table create(String tableName, Path pathToDatabaseRoot, TableIndex tableIndex) throws DatabaseException
+    {
+        if (tableIndex == null)
+        {
             throw new DatabaseException("tableIndex is null");
         }
 
-        if(pathToDatabaseRoot == null){
+        if(pathToDatabaseRoot == null)
+        {
             throw new DatabaseException("path to database is null");
         }
 
@@ -46,11 +50,23 @@ public class TableImpl implements Table {
     }
 
     @Override
-    public void write(String objectKey, byte[] objectValue) throws DatabaseException{
+    public void write(String objectKey, byte[] objectValue) throws DatabaseException
+    {
 
         if(_lastSegment == null || _lastSegment.isReadOnly())
         {
-            createSegment(objectKey, objectValue);
+            String LastSegmentName = SegmentImpl.createSegmentName(_name);
+            Segment segment = SegmentImpl.create(LastSegmentName, _tableRootPath);
+            try
+            {
+                segment.write(objectKey, objectValue);
+            } catch (IOException e) {
+                throw new DatabaseException("Cannot write in segment", e);
+            }
+
+            _lastSegment = segment;
+            _segmentsName.add(segment.getName());
+            _tableIndex.onIndexedEntityUpdated(objectKey, segment);
         }
         try
         {
@@ -64,44 +80,38 @@ public class TableImpl implements Table {
         _tableIndex.onIndexedEntityUpdated(objectKey, _lastSegment);
     }
 
-    private void createSegment(String objectKey, byte[] objectValue) throws DatabaseException{
-        String LastSegmentName = SegmentImpl.createSegmentName(_name);
-        Segment segment = SegmentImpl.create(LastSegmentName, _tableRootPath);
-        try {
-            segment.write(objectKey, objectValue);
-        } catch (IOException e) {
-            throw new DatabaseException("Cannot write in segment", e);
-        }
-
-        _lastSegment = segment;
-        _segmentsName.add(segment.getName());
-        _tableIndex.onIndexedEntityUpdated(objectKey, segment);
-    }
-
-
     @Override
-    public Optional<byte[]> read(String objectKey) throws DatabaseException {
-        try{
+    public Optional<byte[]> read(String objectKey) throws DatabaseException
+    {
+        try
+        {
             Optional<Segment> segment = _tableIndex.searchForKey(objectKey);
-            if (!segment.isPresent()) {
+            if (!segment.isPresent())
+            {
                 return Optional.empty();
             }
-            else{
+            else
+            {
                 return segment.get().read(objectKey);
             }
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             throw new DatabaseException("Cannot read from file");
         }
     }
 
     @Override
-    public void delete(String objectKey) throws DatabaseException{
+    public void delete(String objectKey) throws DatabaseException
+    {
         Optional<Segment> segment = _tableIndex.searchForKey(objectKey);
-        if (segment.equals(Optional.empty())){
+        if (segment.equals(Optional.empty()))
+        {
             throw new DatabaseException("Value by key not found");
         }
-        try{
-            if(_lastSegment.isReadOnly()) {
+        try
+        {
+            if(_lastSegment.isReadOnly())
+            {
                 String LastSegmentName = SegmentImpl.createSegmentName(_name);
                 Segment segmentNew = SegmentImpl.create(LastSegmentName, _tableRootPath);
 
@@ -115,7 +125,8 @@ public class TableImpl implements Table {
                 segment.get().delete(objectKey);
             }
 
-        } catch (IOException e){
+        } catch (IOException e)
+        {
             throw new DatabaseException("Cannot delete from file", e);
         }
     }
