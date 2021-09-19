@@ -48,22 +48,16 @@ public class TableImpl implements Table {
     @Override
     public void write(String objectKey, byte[] objectValue) throws DatabaseException{
 
-        if(_lastSegment == null) {
+        if(_lastSegment == null || _lastSegment.isReadOnly()) {
             createSegment(objectKey, objectValue);
         }
-        else {
-            if(_lastSegment.isReadOnly()) {
-                createSegment(objectKey, objectValue);
-            }
-            else{
-                try {
-                    _lastSegment.write(objectKey, objectValue);
-                    _tableIndex.onIndexedEntityUpdated(objectKey, _lastSegment);
-                }
-                catch (IOException e) {
-                    throw new DatabaseException("Cannot write in segment", e);
-                }
-            }
+        try
+        {
+            _lastSegment.write(objectKey, objectValue);
+            _tableIndex.onIndexedEntityUpdated(objectKey, _lastSegment);
+        }
+        catch (IOException e) {
+            throw new DatabaseException("Cannot write in segment", e);
         }
     }
 
@@ -86,7 +80,7 @@ public class TableImpl implements Table {
     public Optional<byte[]> read(String objectKey) throws DatabaseException {
         try{
             Optional<Segment> segment = _tableIndex.searchForKey(objectKey);
-            if (segment.equals(Optional.empty())) {
+            if (!segment.isPresent()) {
                 return Optional.empty();
             }
             else{

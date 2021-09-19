@@ -44,7 +44,6 @@ public class SegmentImpl implements Segment {
 
             String segmentFile = _segmentRootPath.toString();
             DataWriter = new DatabaseOutputStream(new FileOutputStream(segmentFile));
-            //DataReader = new DatabaseInputStream(new FileInputStream(segmentFile));
 
         } catch (IOException e) {
             throw new DatabaseException("Cannot find a file");
@@ -60,7 +59,7 @@ public class SegmentImpl implements Segment {
     private WritableDatabaseRecord rec;
 
     private boolean isFull = false;
-    private final int maxSizeSegment = 99999;
+    private final int maxSizeSegment = 10000;
 
     @Override
     public String getName() {
@@ -70,9 +69,7 @@ public class SegmentImpl implements Segment {
     @Override
     public boolean write(String objectKey, byte[] objectValue) throws IOException {
         try{
-            /*String segmentFile = _segmentRootPath.toString();
-            DataWriter = new DatabaseOutputStream(new FileOutputStream(segmentFile));*/
-            rec = SetDatabaseRecord.create(objectKey, objectValue);
+            rec = SetDatabaseRecord.create(objectKey.getBytes(StandardCharsets.UTF_8), objectValue);
             DataWriter.write(rec);
             File file = new File(_segmentRootPath.toString());
 
@@ -92,19 +89,23 @@ public class SegmentImpl implements Segment {
     @Override
     public Optional<byte[]> read(String objectKey) throws IOException {
         try{
-            String segmentFile = _segmentRootPath.toString();
-            DataReader = new DatabaseInputStream(new FileInputStream(segmentFile));
+            DataReader = new DatabaseInputStream(new FileInputStream(_segmentRootPath.toString()));
             Optional<SegmentOffsetInfo> offset = _segmentIndex.searchForKey(objectKey);
+
             if (offset.equals(Optional.empty()))
                 throw new IOException("offset not set");
+
             DataReader.skip(offset.get().getOffset());
             Optional<DatabaseRecord> value = DataReader.readDbUnit();
-            if (!value.get().isValuePresented()){
+
+            if (!value.get().isValuePresented() || value.isEmpty())
+            {
                 return Optional.empty();
             }
-            else{
-                String stringValue = new String(value.get().getValue(), StandardCharsets.UTF_8);
-                return Optional.of(value.get().getValue());
+            else
+            {
+                //String stringValue = new String(value.get().getValue(), StandardCharsets.UTF_8);
+                return Optional.ofNullable(value.get().getValue());
             }
         }catch (IOException e)
         {
@@ -123,16 +124,6 @@ public class SegmentImpl implements Segment {
             String segmentFile = _segmentRootPath.toString();
             DataReader = new DatabaseInputStream(new FileInputStream(segmentFile));
 
-            //Optional<SegmentOffsetInfo> offset = _segmentIndex.searchForKey(objectKey);
-            //if (offset.equals(Optional.empty()))
-            //    throw new IOException("Offset not set");
-
-            //DataReader.skip(offset.get().getOffset());
-            //Optional<DatabaseRecord> value = DataReader.readDbUnit();
-            //byte[] nullValue = "NULL".getBytes(StandardCharsets.UTF_8);
-
-            //if (value.equals(Optional.empty()))
-                //throw new IOException("value not present");
             rec = RemoveDatabaseRecord.create(objectKey);
 
             DataWriter.write(rec);

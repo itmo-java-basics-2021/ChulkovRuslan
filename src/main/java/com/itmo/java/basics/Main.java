@@ -17,12 +17,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         String pathDataBase = "E:\\Projects\\TP\\databases";
         Path databaseRoot = Paths.get(pathDataBase);
-        File file = new File(pathDataBase);
-        /*if (file.isDirectory() && !(file.list().length == 0))
-        {
-            file.delete();
-            Files.createDirectory(databaseRoot);
-        }*/
+
 
         try {
             String persons = "persons";
@@ -64,9 +59,9 @@ public class Main {
                 answer = (answer.equals("lilsBoy") ? "pass" : "faild");
                 System.out.println(answer);
 
-                db.delete("children", "Dima");
+                db.delete("children", "Ruslan");
 
-                nedValue = db.read("children", "Dima");
+                nedValue = db.read("children", "Ruslan");
                 answer = (nedValue.equals(Optional.empty())) ? "pass" : "fail";
                 System.out.println(answer);
                 value = "lilsBoy".getBytes(StandardCharsets.UTF_8);

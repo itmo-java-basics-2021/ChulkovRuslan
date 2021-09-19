@@ -7,20 +7,22 @@ import java.nio.charset.StandardCharsets;
 
 public class SetDatabaseRecord implements WritableDatabaseRecord {
 
-    private String _key;
+    //private String _key;
+    private byte[] _key;
     private byte[] _value;
 
-    public static WritableDatabaseRecord create(String objectKey, byte[] objectValue){
+    public static WritableDatabaseRecord create(byte[] objectKey, byte[] objectValue){
         return new SetDatabaseRecord(objectKey, objectValue);
     }
 
-    private SetDatabaseRecord(String objectKey, byte[] objectValue) {
+    private SetDatabaseRecord(byte[] objectKey, byte[] objectValue) {
         _key = objectKey;
         _value = objectValue;
     }
     @Override
     public byte[] getKey() {
-        return _key.getBytes(StandardCharsets.UTF_8);
+        //return _key.getBytes(StandardCharsets.UTF_8);
+        return _key;
     }
 
     @Override
@@ -30,7 +32,7 @@ public class SetDatabaseRecord implements WritableDatabaseRecord {
 
     @Override
     public long size() {
-        return _key.length() + _value.length + 2 * Integer.BYTES;
+        return _key.length + _value.length + 2 * Integer.BYTES;
     }
 
     @Override
@@ -40,7 +42,7 @@ public class SetDatabaseRecord implements WritableDatabaseRecord {
 
     @Override
     public int getKeySize() {
-        return _key.length();
+        return _key.length;
     }
 
     @Override
