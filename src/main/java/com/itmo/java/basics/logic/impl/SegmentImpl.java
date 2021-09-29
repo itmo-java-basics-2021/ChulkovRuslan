@@ -128,15 +128,14 @@ public class SegmentImpl implements Segment {
 
         try
         {
-            String segmentFile = _segmentRootPath.toString();
-            DataReader = new DatabaseInputStream(new FileInputStream(segmentFile));
+            DataReader = new DatabaseInputStream(new FileInputStream(_segmentRootPath.toString()));
 
             rec = RemoveDatabaseRecord.create(objectKey.getBytes(StandardCharsets.UTF_8));
 
             DataWriter.write(rec);
             File file = new File(_segmentRootPath.toString());
 
-            _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(file.length() - rec.size()));
+            _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(-1));
 
             if (file.length() >= maxSizeSegment){
                 isFull = true;
