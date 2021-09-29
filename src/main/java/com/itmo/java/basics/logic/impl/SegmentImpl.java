@@ -141,7 +141,7 @@ public class SegmentImpl implements Segment
         }
         catch (IOException e)
         {
-            throw new IOException("Cannot delete from file");
+            throw new IOException("Cannot delete from file",e);
         }
 
         return true;
