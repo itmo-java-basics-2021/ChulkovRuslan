@@ -92,10 +92,11 @@ public class TableImpl implements Table
     {
         try
         {
-            if (_lastSegment != null)
+            if (_lastSegment == null || _lastSegment.isReadOnly())
             {
-                _lastSegment.delete(objectKey);
+                _lastSegment = SegmentImpl.create(SegmentImpl.createSegmentName(_name), _tableRootPath);
             }
+            _lastSegment.delete(objectKey);
         }
         catch(IOException e)
         {

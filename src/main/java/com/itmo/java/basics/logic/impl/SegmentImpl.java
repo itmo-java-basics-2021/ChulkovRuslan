@@ -19,9 +19,10 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Optional;
 
-public class SegmentImpl implements Segment {
-    static Segment create(String segmentName, Path tableRootPath) throws DatabaseException {
-
+public class SegmentImpl implements Segment
+{
+    static Segment create(String segmentName, Path tableRootPath) throws DatabaseException
+    {
         Path segmentRootPath = tableRootPath.resolve(segmentName);
         try {
             Files.createFile(segmentRootPath);
@@ -36,7 +37,8 @@ public class SegmentImpl implements Segment {
         return tableName + "_" + System.currentTimeMillis();
     }
 
-    private SegmentImpl(String name, Path segmentRootPath) throws DatabaseException {
+    private SegmentImpl(String name, Path segmentRootPath) throws DatabaseException
+    {
         _segmentName = name;
         _segmentRootPath = segmentRootPath;
         _segmentIndex = new SegmentIndex();
@@ -64,7 +66,8 @@ public class SegmentImpl implements Segment {
     }
 
     @Override
-    public boolean write(String objectKey, byte[] objectValue) throws IOException {
+    public boolean write(String objectKey, byte[] objectValue) throws IOException
+    {
         if (isReadOnly())
             return false;
 
@@ -87,10 +90,11 @@ public class SegmentImpl implements Segment {
     }
 
     @Override
-    public Optional<byte[]> read(String objectKey) throws IOException {
-        try
+    public Optional<byte[]> read(String objectKey) throws IOException
+    {
+        try(var inputStream = new FileInputStream(_segmentRootPath.toString()))
         {
-            DataReader = new DatabaseInputStream(new FileInputStream(_segmentRootPath.toString()));
+            DataReader = new DatabaseInputStream(inputStream);
             Optional<SegmentOffsetInfo> offset = _segmentIndex.searchForKey(objectKey);
 
             if (offset.isEmpty() || offset.get().getOffset() == -1)
@@ -118,7 +122,8 @@ public class SegmentImpl implements Segment {
     }
 
     @Override
-    public boolean delete(String objectKey) throws IOException {
+    public boolean delete(String objectKey) throws IOException
+    {
         if (isReadOnly())
             return false;
 
