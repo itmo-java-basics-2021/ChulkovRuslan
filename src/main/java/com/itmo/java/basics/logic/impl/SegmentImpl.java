@@ -123,6 +123,9 @@ public class SegmentImpl implements Segment {
 
     @Override
     public boolean delete(String objectKey) throws IOException {
+        if (isReadOnly())
+            return false;
+
         try
         {
             String segmentFile = _segmentRootPath.toString();

@@ -72,7 +72,6 @@ public class DatabaseImpl implements Database {
     @Override
     public void write(String tableName, String objectKey, byte[] objectValue) throws DatabaseException
     {
-
         if (_table.containsKey(tableName))
         {
             _table.get(tableName).write(objectKey, objectValue);
@@ -81,7 +80,6 @@ public class DatabaseImpl implements Database {
         {
             throw new DatabaseException("Cannot find table name");
         }
-
     }
 
     @Override
