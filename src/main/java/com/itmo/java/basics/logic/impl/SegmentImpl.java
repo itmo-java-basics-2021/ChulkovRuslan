@@ -37,17 +37,13 @@ public class SegmentImpl implements Segment {
     }
 
     private SegmentImpl(String name, Path segmentRootPath) throws DatabaseException {
-        try{
-            _segmentName = name;
-            _segmentRootPath = segmentRootPath;
-            _segmentIndex = new SegmentIndex();
+        _segmentName = name;
+        _segmentRootPath = segmentRootPath;
+        _segmentIndex = new SegmentIndex();
 
-            String segmentFile = _segmentRootPath.toString();
-            DataWriter = new DatabaseOutputStream(new FileOutputStream(segmentFile));
+        //String segmentFile = _segmentRootPath.toString();
+        //DataWriter = new DatabaseOutputStream(new FileOutputStream(segmentFile));
 
-        } catch (IOException e) {
-            throw new DatabaseException("Cannot find a file");
-        }
     }
 
     private String _segmentName;
@@ -72,15 +68,13 @@ public class SegmentImpl implements Segment {
         if (isReadOnly())
             return false;
 
-        try
+        try(var outputStream = new FileOutputStream(_segmentRootPath.toString(), true))
         {
-            rec = SetDatabaseRecord.create(objectKey.getBytes(StandardCharsets.UTF_8), objectValue);
+            var rec = SetDatabaseRecord.create(objectKey.getBytes(StandardCharsets.UTF_8), objectValue);
 
-            //File file = new File(_segmentRootPath.toString());
-
-            //_segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(file.length() - rec.size()));
             _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(size));
-            size += DataWriter.write(rec); // +
+            DataWriter = new DatabaseOutputStream(outputStream); // ++
+            size += DataWriter.write(rec);
             if (size >= maxSizeSegment)
                 isFull = true;
         }
@@ -128,16 +122,14 @@ public class SegmentImpl implements Segment {
         if (isReadOnly())
             return false;
 
-        try
+        try(var outputStream = new FileOutputStream(_segmentRootPath.toString(), true))
         {
-            DataReader = new DatabaseInputStream(new FileInputStream(_segmentRootPath.toString()));
+            DataWriter = new DatabaseOutputStream(outputStream);
 
             rec = RemoveDatabaseRecord.create(objectKey.getBytes(StandardCharsets.UTF_8));
 
-            //File file = new File(_segmentRootPath.toString());
-
             _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(-1));
-            size += DataWriter.write(rec); // +
+            size += DataWriter.write(rec);
             if (size >= maxSizeSegment){
                 isFull = true;
             }
