@@ -52,15 +52,6 @@ public class TableImpl implements Table
         if(_lastSegment == null || _lastSegment.isReadOnly())
         {
             _lastSegment = SegmentImpl.create(SegmentImpl.createSegmentName(_name), _tableRootPath);
-            try
-            {
-                _lastSegment.write(objectKey, objectValue);
-            }
-            catch (IOException e)
-            {
-                throw new DatabaseException("Cannot write in segment", e);
-            }
-            _tableIndex.onIndexedEntityUpdated(objectKey, _lastSegment);
         }
 
         try

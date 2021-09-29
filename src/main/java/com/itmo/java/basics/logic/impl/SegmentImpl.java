@@ -60,6 +60,7 @@ public class SegmentImpl implements Segment {
 
     private boolean isFull = false;
     private final int maxSizeSegment = 10000;
+    private long size = 0;
 
     @Override
     public String getName() {
@@ -74,12 +75,13 @@ public class SegmentImpl implements Segment {
         try
         {
             rec = SetDatabaseRecord.create(objectKey.getBytes(StandardCharsets.UTF_8), objectValue);
-            DataWriter.write(rec);
-            File file = new File(_segmentRootPath.toString());
 
-            _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(file.length() - rec.size()));
+            //File file = new File(_segmentRootPath.toString());
 
-            if (file.length() >= maxSizeSegment)
+            //_segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(file.length() - rec.size()));
+            _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(size));
+            size += DataWriter.write(rec); // +
+            if (size >= maxSizeSegment)
                 isFull = true;
         }
         catch (IOException e)
@@ -132,12 +134,11 @@ public class SegmentImpl implements Segment {
 
             rec = RemoveDatabaseRecord.create(objectKey.getBytes(StandardCharsets.UTF_8));
 
-            DataWriter.write(rec);
-            File file = new File(_segmentRootPath.toString());
+            //File file = new File(_segmentRootPath.toString());
 
             _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(-1));
-
-            if (file.length() >= maxSizeSegment){
+            size += DataWriter.write(rec); // +
+            if (size >= maxSizeSegment){
                 isFull = true;
             }
         }
