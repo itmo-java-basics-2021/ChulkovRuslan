@@ -101,7 +101,7 @@ public class TableImpl implements Table
     {
         try
         {
-            /*if (_lastSegment.isReadOnly() || _lastSegment == null)
+            if (_lastSegment.isReadOnly() || _lastSegment == null)
             {
                 String LastSegmentName = SegmentImpl.createSegmentName(_name);
                 _lastSegment = SegmentImpl.create(LastSegmentName, _tableRootPath);
@@ -109,12 +109,12 @@ public class TableImpl implements Table
                 _tableIndex.onIndexedEntityUpdated(objectKey, null);
             }
 
-            _lastSegment.delete(objectKey);*/
+            _lastSegment.delete(objectKey);
 
-            if (_lastSegment != null)
+            /*if (_lastSegment != null)
             {
                 _lastSegment.delete(objectKey);
-            }
+            }*/
         }
         catch(IOException e)
         {
