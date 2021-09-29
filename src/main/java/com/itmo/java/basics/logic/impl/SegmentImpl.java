@@ -94,8 +94,8 @@ public class SegmentImpl implements Segment {
             DataReader = new DatabaseInputStream(new FileInputStream(_segmentRootPath.toString()));
             Optional<SegmentOffsetInfo> offset = _segmentIndex.searchForKey(objectKey);
 
-            if (offset.equals(Optional.empty()))
-                throw new IOException("offset not set");
+            if (offset.isEmpty() || offset.get().getOffset() == -1)
+                return Optional.empty();
 
             DataReader.skip(offset.get().getOffset());
             Optional<DatabaseRecord> value = DataReader.readDbUnit();

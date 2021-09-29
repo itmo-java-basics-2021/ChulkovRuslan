@@ -40,8 +40,6 @@ public class TableImpl implements Table
     private Path _tableRootPath;
     private TableIndex _tableIndex;
     private ArrayList<String> _segmentsName = new ArrayList<>();
-    //private ArrayList<Segment> _segments;
-    //private String _lastSegmentName;
     private Segment _lastSegment;
 
     @Override
@@ -86,22 +84,23 @@ public class TableImpl implements Table
         try
         {
             Optional<Segment> segment = _tableIndex.searchForKey(objectKey);
-            if (!segment.isPresent())
-            {
-                return Optional.empty();
-            }
-            else
+            if (segment.isPresent())
             {
                 return segment.get().read(objectKey);
             }
+            else
+            {
+                return Optional.empty();
+            }
         } catch (IOException e)
         {
-            throw new DatabaseException("Cannot read from file");
+            throw new DatabaseException("Cannot read from file", e);
         }
     }
 
     @Override
-    public void delete(String objectKey) throws DatabaseException {
+    public void delete(String objectKey) throws DatabaseException
+    {
         try
         {
             if (_lastSegment.isReadOnly() || _lastSegment == null)
@@ -123,32 +122,5 @@ public class TableImpl implements Table
         {
             throw new DatabaseException("Cannot delete from file", e);
         }
-
-        /*Optional<Segment> segment = _tableIndex.searchForKey(objectKey);
-        if (segment.equals(Optional.empty()))
-        {
-            throw new DatabaseException("Value by key not found");
-        }
-        try
-        {
-            if(_lastSegment.isReadOnly())
-            {
-                String LastSegmentName = SegmentImpl.createSegmentName(_name);
-                Segment segmentNew = SegmentImpl.create(LastSegmentName, _tableRootPath);
-
-                _lastSegment = segmentNew;
-                _segmentsName.add(segmentNew.getName());
-                _tableIndex.onIndexedEntityUpdated(objectKey, null);
-                segmentNew.delete(objectKey);
-            }
-            else
-            {
-                segment.get().delete(objectKey);
-            }
-
-        } catch (IOException e)
-        {
-            throw new DatabaseException("Cannot delete from file", e);
-        }*/
     }
 }
