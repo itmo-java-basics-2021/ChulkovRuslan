@@ -141,12 +141,12 @@ public class SegmentImpl implements Segment {
             if (file.length() >= maxSizeSegment){
                 isFull = true;
             }
-
-            return true;
         }
         catch (IOException e)
         {
             throw new IOException("Cannot delete from file");
         }
+
+        return true;
     }
 }
