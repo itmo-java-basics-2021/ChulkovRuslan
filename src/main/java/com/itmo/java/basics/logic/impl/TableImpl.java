@@ -39,7 +39,6 @@ public class TableImpl implements Table
     private String _name;
     private Path _tableRootPath;
     private TableIndex _tableIndex;
-    private ArrayList<String> _segmentsName = new ArrayList<>();
     private Segment _lastSegment;
 
     @Override
@@ -50,22 +49,20 @@ public class TableImpl implements Table
     @Override
     public void write(String objectKey, byte[] objectValue) throws DatabaseException
     {
-
         if(_lastSegment == null || _lastSegment.isReadOnly())
         {
-            String LastSegmentName = SegmentImpl.createSegmentName(_name);
-            Segment segment = SegmentImpl.create(LastSegmentName, _tableRootPath);
+            _lastSegment = SegmentImpl.create(SegmentImpl.createSegmentName(_name), _tableRootPath);
             try
             {
-                segment.write(objectKey, objectValue);
-            } catch (IOException e) {
+                _lastSegment.write(objectKey, objectValue);
+            }
+            catch (IOException e)
+            {
                 throw new DatabaseException("Cannot write in segment", e);
             }
-
-            _lastSegment = segment;
-            _segmentsName.add(segment.getName());
-            _tableIndex.onIndexedEntityUpdated(objectKey, segment);
+            _tableIndex.onIndexedEntityUpdated(objectKey, _lastSegment);
         }
+
         try
         {
             _lastSegment.write(objectKey, objectValue);
@@ -106,17 +103,12 @@ public class TableImpl implements Table
             if (_lastSegment.isReadOnly() || _lastSegment == null)
             {
                 String LastSegmentName = SegmentImpl.createSegmentName(_name);
-                Segment segmentNew = SegmentImpl.create(LastSegmentName, _tableRootPath);
+                _lastSegment = SegmentImpl.create(LastSegmentName, _tableRootPath);
 
-                _lastSegment = segmentNew;
-                _segmentsName.add(segmentNew.getName());
                 _tableIndex.onIndexedEntityUpdated(objectKey, null);
-                segmentNew.delete(objectKey);
             }
-            else
-            {
-                _lastSegment.delete(objectKey);
-            }
+
+            _lastSegment.delete(objectKey);
         }
         catch(IOException e)
         {

@@ -6,19 +6,19 @@ import java.nio.charset.StandardCharsets;
 
 public class RemoveDatabaseRecord implements WritableDatabaseRecord {
 
-    private String _key;
+    private byte[] _key;
 
-    public static WritableDatabaseRecord create(String objectKey){
+    public static WritableDatabaseRecord create(byte[] objectKey){
         return new RemoveDatabaseRecord(objectKey);
     }
 
-    private RemoveDatabaseRecord(String objectKey) {
+    private RemoveDatabaseRecord(byte[] objectKey) {
         _key = objectKey;
     }
 
     @Override
     public byte[] getKey() {
-        return _key.getBytes(StandardCharsets.UTF_8);
+        return _key;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class RemoveDatabaseRecord implements WritableDatabaseRecord {
 
     @Override
     public long size() {
-        return _key.length() + 2 * Integer.BYTES;
+        return getKeySize() + 2 * Integer.BYTES;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class RemoveDatabaseRecord implements WritableDatabaseRecord {
 
     @Override
     public int getKeySize() {
-        return _key.length();
+        return _key.length;
     }
 
     @Override

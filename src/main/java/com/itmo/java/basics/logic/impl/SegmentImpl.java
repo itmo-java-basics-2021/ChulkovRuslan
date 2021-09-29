@@ -68,9 +68,12 @@ public class SegmentImpl implements Segment {
 
     @Override
     public boolean write(String objectKey, byte[] objectValue) throws IOException {
+        if (isReadOnly())
+            return false;
+
         try
         {
-            rec = SetDatabaseRecord.create(objectKey, objectValue);
+            rec = SetDatabaseRecord.create(objectKey.getBytes(StandardCharsets.UTF_8), objectValue);
             DataWriter.write(rec);
             File file = new File(_segmentRootPath.toString());
 
@@ -78,13 +81,13 @@ public class SegmentImpl implements Segment {
 
             if (file.length() >= maxSizeSegment)
                 isFull = true;
-
-            return true;
         }
         catch (IOException e)
         {
             throw new IOException("Cannot write in file");
         }
+
+        return true;
     }
 
     @Override
@@ -104,11 +107,8 @@ public class SegmentImpl implements Segment {
             {
                 return Optional.empty();
             }
-            else
-            {
-                //String stringValue = new String(value.get().getValue(), StandardCharsets.UTF_8);
-                return Optional.ofNullable(value.get().getValue());
-            }
+
+            return Optional.ofNullable(value.get().getValue());
         }
         catch (IOException e)
         {
@@ -128,7 +128,7 @@ public class SegmentImpl implements Segment {
             String segmentFile = _segmentRootPath.toString();
             DataReader = new DatabaseInputStream(new FileInputStream(segmentFile));
 
-            rec = RemoveDatabaseRecord.create(objectKey);
+            rec = RemoveDatabaseRecord.create(objectKey.getBytes(StandardCharsets.UTF_8));
 
             DataWriter.write(rec);
             File file = new File(_segmentRootPath.toString());

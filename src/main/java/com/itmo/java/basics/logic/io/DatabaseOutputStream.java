@@ -34,9 +34,11 @@ public class DatabaseOutputStream extends DataOutputStream {
      * @throws IOException если запись не удалась
      */
     public int write(WritableDatabaseRecord databaseRecord) throws IOException {
-        try{
+        try
+        {
             writeInt(databaseRecord.getKeySize());
-            writeBytes(new String(databaseRecord.getKey(), StandardCharsets.UTF_8));
+            //writeBytes(new String(databaseRecord.getKey(), StandardCharsets.UTF_8));
+            write(databaseRecord.getKey());
 
             if (!databaseRecord.isValuePresented())
             {
@@ -45,10 +47,12 @@ public class DatabaseOutputStream extends DataOutputStream {
             else
             {
                 writeInt(databaseRecord.getValueSize());
-                writeBytes(new String(databaseRecord.getValue(), StandardCharsets.UTF_8));
+                //writeBytes(new String(databaseRecord.getValue(), StandardCharsets.UTF_8));
+                write(databaseRecord.getValue());
             }
         }
-        catch(IOException e){
+        catch(IOException e)
+        {
             throw new IOException("Failed write to file");
         }
 

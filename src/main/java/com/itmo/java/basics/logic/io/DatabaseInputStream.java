@@ -29,16 +29,19 @@ public class DatabaseInputStream extends DataInputStream {
      */
     public Optional<DatabaseRecord> readDbUnit() throws IOException{
         try {
-            String keyString = new String(readNBytes(readInt()), StandardCharsets.UTF_8);
+            int keySize = readInt();
+            byte[] key = readNBytes(keySize);
+            //String keyString = new String(readNBytes(readInt()), StandardCharsets.UTF_8);
 
             int valueSize = readInt();
             if(valueSize == -1)
-                return Optional.of(RemoveDatabaseRecord.create(keyString));
-            String valueString = new String(readNBytes(valueSize), StandardCharsets.UTF_8);
+                return Optional.of(RemoveDatabaseRecord.create(key));
+            //String valueString = new String(readNBytes(valueSize), StandardCharsets.UTF_8);
+            byte[] value = readNBytes(valueSize);
 
-            Optional<DatabaseRecord> rec = Optional.of(SetDatabaseRecord.create(keyString, valueString.getBytes(StandardCharsets.UTF_8)));
+            //Optional<DatabaseRecord> rec = Optional.of(SetDatabaseRecord.create(key, value));
 
-            return rec;
+            return Optional.of(SetDatabaseRecord.create(key, value));
         } catch (IOException e){
             throw new IOException("Cannot read");
         }
