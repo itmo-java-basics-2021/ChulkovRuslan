@@ -21,12 +21,27 @@ import java.util.Optional;
 
 public class SegmentImpl implements Segment
 {
+    private final String _segmentName;
+    private final Path _segmentRootPath;
+    private final SegmentIndex _segmentIndex;
+
+    private DatabaseOutputStream DataWriter;
+    private DatabaseInputStream DataReader;
+    private WritableDatabaseRecord rec;
+
+    private boolean isFull = false;
+    private final int maxSizeSegment = 10000;
+    private long size = 0;
+
     static Segment create(String segmentName, Path tableRootPath) throws DatabaseException
     {
         Path segmentRootPath = tableRootPath.resolve(segmentName);
-        try {
+        try
+        {
             Files.createFile(segmentRootPath);
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             throw new DatabaseException("Cannot create segment", e);
         }
 
@@ -43,22 +58,7 @@ public class SegmentImpl implements Segment
         _segmentRootPath = segmentRootPath;
         _segmentIndex = new SegmentIndex();
 
-        //String segmentFile = _segmentRootPath.toString();
-        //DataWriter = new DatabaseOutputStream(new FileOutputStream(segmentFile));
-
     }
-
-    private final String _segmentName;
-    private final Path _segmentRootPath;
-    private final SegmentIndex _segmentIndex;
-
-    private DatabaseOutputStream DataWriter;
-    private DatabaseInputStream DataReader;
-    private WritableDatabaseRecord rec;
-
-    private boolean isFull = false;
-    private final int maxSizeSegment = 10000;
-    private long size = 0;
 
     @Override
     public String getName() {
@@ -73,7 +73,7 @@ public class SegmentImpl implements Segment
 
         try(var outputStream = new FileOutputStream(_segmentRootPath.toString(), true))
         {
-            var rec = SetDatabaseRecord.create(objectKey.getBytes(StandardCharsets.UTF_8), objectValue);
+            var rec = new SetDatabaseRecord(objectKey.getBytes(StandardCharsets.UTF_8), objectValue);
 
             _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(size));
             DataWriter = new DatabaseOutputStream(outputStream); // ++
@@ -131,7 +131,8 @@ public class SegmentImpl implements Segment
         {
             DataWriter = new DatabaseOutputStream(outputStream);
 
-            rec = RemoveDatabaseRecord.create(objectKey.getBytes(StandardCharsets.UTF_8));
+            //rec = RemoveDatabaseRecord.create(objectKey.getBytes(StandardCharsets.UTF_8));
+            rec = new RemoveDatabaseRecord(objectKey.getBytes(StandardCharsets.UTF_8));
 
             _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(-1));
             size += DataWriter.write(rec);

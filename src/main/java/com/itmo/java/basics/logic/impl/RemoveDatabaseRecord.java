@@ -4,45 +4,31 @@ import com.itmo.java.basics.logic.WritableDatabaseRecord;
 
 import java.nio.charset.StandardCharsets;
 
-public class RemoveDatabaseRecord implements WritableDatabaseRecord {
+public class RemoveDatabaseRecord implements WritableDatabaseRecord
+{
 
-    private byte[] _key;
+    private final byte[] _key;
 
-    public static WritableDatabaseRecord create(byte[] objectKey){
-        return new RemoveDatabaseRecord(objectKey);
-    }
+    //public static WritableDatabaseRecord create(byte[] objectKey) { return new RemoveDatabaseRecord(objectKey); }
 
-    private RemoveDatabaseRecord(byte[] objectKey) {
-        _key = objectKey;
-    }
+    //private RemoveDatabaseRecord(byte[] objectKey) { _key = objectKey; }
+    public RemoveDatabaseRecord(byte[] objectKey) { _key = objectKey; }
 
     @Override
-    public byte[] getKey() {
-        return _key;
-    }
+    public byte[] getKey() { return _key; }
 
     @Override
-    public byte[] getValue() {
-        return null;
-    }
+    public byte[] getValue() { return null; }
 
     @Override
-    public long size() {
-        return getKeySize() + 2 * Integer.BYTES;
-    }
+    public long size() { return getKeySize() + 2 * Integer.BYTES; }
 
     @Override
-    public boolean isValuePresented() {
-        return false;
-    }
+    public boolean isValuePresented() { return false; }
 
     @Override
-    public int getKeySize() {
-        return _key.length;
-    }
+    public int getKeySize() { return _key.length; }
 
     @Override
-    public int getValueSize() {
-        return 0;
-    }
+    public int getValueSize() { return 0; }
 }

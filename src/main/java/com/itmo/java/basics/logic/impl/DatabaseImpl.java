@@ -14,6 +14,10 @@ import java.util.Map;
 import java.util.Optional;
 
 public class DatabaseImpl implements Database {
+    private final String _name;
+    private final Path _databaseRoot;
+    private Map<String, Table> _table;
+
     public static Database create(String dbName, Path databaseRoot) throws DatabaseException {
         if (dbName == null)
         {
@@ -41,10 +45,6 @@ public class DatabaseImpl implements Database {
             throw new DatabaseException("Cannot create directory for database",e);
         }
     }
-
-    private final String _name;
-    private final Path _databaseRoot;
-    private Map<String, Table> _table;
 
     @Override
     public String getName() {

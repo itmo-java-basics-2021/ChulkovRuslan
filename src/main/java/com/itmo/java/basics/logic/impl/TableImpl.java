@@ -14,6 +14,11 @@ import java.util.Optional;
 
 public class TableImpl implements Table
 {
+    private final String _name;
+    private final Path _tableRootPath;
+    private final TableIndex _tableIndex;
+    private Segment _lastSegment;
+
     static Table create(String tableName, Path pathToDatabaseRoot, TableIndex tableIndex) throws DatabaseException
     {
         if (tableIndex == null)
@@ -35,11 +40,6 @@ public class TableImpl implements Table
         _tableRootPath = pathToDatabaseRoot.resolve(_name);
         _tableIndex = tableIndex;
     }
-
-    private final String _name;
-    private final Path _tableRootPath;
-    private final TableIndex _tableIndex;
-    private Segment _lastSegment;
 
     @Override
     public String getName() {

@@ -12,7 +12,8 @@ import java.nio.charset.StandardCharsets;
 /**
  * Записывает данные в БД
  */
-public class DatabaseOutputStream extends DataOutputStream {
+public class DatabaseOutputStream extends DataOutputStream
+{
 
     public DatabaseOutputStream(OutputStream outputStream) {
         super(outputStream);
@@ -33,7 +34,8 @@ public class DatabaseOutputStream extends DataOutputStream {
      * @return размер записи
      * @throws IOException если запись не удалась
      */
-    public int write(WritableDatabaseRecord databaseRecord) throws IOException {
+    public int write(WritableDatabaseRecord databaseRecord) throws IOException
+    {
         try
         {
             writeInt(databaseRecord.getKeySize());
@@ -58,6 +60,4 @@ public class DatabaseOutputStream extends DataOutputStream {
 
         return (int)databaseRecord.size();
     }
-
-
 }
