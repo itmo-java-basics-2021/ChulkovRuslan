@@ -58,13 +58,12 @@ public class TableImpl implements Table
             }
 
             _lastSegment.write(objectKey, objectValue);
+            _tableIndex.onIndexedEntityUpdated(objectKey, _lastSegment);
         }
         catch (IOException e)
         {
             throw new DatabaseException("Cannot write in segment", e);
         }
-
-        _tableIndex.onIndexedEntityUpdated(objectKey, _lastSegment);
     }
 
     @Override
@@ -97,6 +96,7 @@ public class TableImpl implements Table
             {
                 _lastSegment = SegmentImpl.create(SegmentImpl.createSegmentName(_name), _tableRootPath);
             }
+
             _lastSegment.delete(objectKey);
         }
         catch(IOException e)
