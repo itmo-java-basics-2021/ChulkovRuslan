@@ -52,7 +52,7 @@ public class SegmentImpl implements Segment
         return tableName + "_" + System.currentTimeMillis();
     }
 
-    private SegmentImpl(String name, Path segmentRootPath) throws DatabaseException
+    private SegmentImpl(String name, Path segmentRootPath)
     {
         _segmentName = name;
         _segmentRootPath = segmentRootPath;
@@ -83,7 +83,7 @@ public class SegmentImpl implements Segment
         }
         catch (IOException e)
         {
-            throw new IOException("Cannot write in file");
+            throw new IOException("Cannot write in file", e);
         }
 
         return true;
@@ -103,7 +103,7 @@ public class SegmentImpl implements Segment
             DataReader.skip(offset.get().getOffset());
             Optional<DatabaseRecord> value = DataReader.readDbUnit();
 
-            if (!value.get().isValuePresented() || value.isEmpty())
+            if (value.isEmpty() || !value.get().isValuePresented())
             {
                 return Optional.empty();
             }
@@ -112,7 +112,7 @@ public class SegmentImpl implements Segment
         }
         catch (IOException e)
         {
-            throw new IOException("Cannot read file");
+            throw new IOException("Cannot read file", e);
         }
     }
 
@@ -142,7 +142,7 @@ public class SegmentImpl implements Segment
         }
         catch (IOException e)
         {
-            throw new IOException("Cannot delete from file",e);
+            throw new IOException("Cannot delete from file", e);
         }
 
         return true;
