@@ -1,9 +1,6 @@
 package com.itmo.java.basics.logic.impl;
 
-import com.itmo.java.basics.exceptions.DatabaseException;
 import com.itmo.java.basics.logic.WritableDatabaseRecord;
-
-import java.nio.charset.StandardCharsets;
 
 public class SetDatabaseRecord implements WritableDatabaseRecord
 {
