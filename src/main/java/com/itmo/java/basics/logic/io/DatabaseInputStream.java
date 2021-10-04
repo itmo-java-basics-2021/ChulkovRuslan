@@ -34,16 +34,11 @@ public class DatabaseInputStream extends DataInputStream
         {
             int keySize = readInt();
             byte[] key = readNBytes(keySize);
-            //String keyString = new String(readNBytes(readInt()), StandardCharsets.UTF_8);
 
             int valueSize = readInt();
             if(valueSize == REMOVED_OBJECT_SIZE)
-                //return Optional.of(RemoveDatabaseRecord.create(key));
                 return Optional.of(new RemoveDatabaseRecord(key));
-            //String valueString = new String(readNBytes(valueSize), StandardCharsets.UTF_8);
             byte[] value = readNBytes(valueSize);
-
-            //Optional<DatabaseRecord> rec = Optional.of(SetDatabaseRecord.create(key, value));
 
             return Optional.of(new SetDatabaseRecord(key, value));
         }

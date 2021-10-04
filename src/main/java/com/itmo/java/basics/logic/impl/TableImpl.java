@@ -93,16 +93,15 @@ public class TableImpl implements Table
     {
         try
         {
-            /*if (_lastSegment == null || _lastSegment.isReadOnly())
+            if (_lastSegment == null || _lastSegment.isReadOnly())
             {
                 _lastSegment = SegmentImpl.create(SegmentImpl.createSegmentName(_name), _tableRootPath);
-            }*/
-            if (_lastSegment != null)
-                _lastSegment.delete(objectKey);
+            }
+            _lastSegment.delete(objectKey);
         }
         catch(IOException e)
         {
-            throw new DatabaseException("Cannot delete from file", e);
+            throw new DatabaseException("Cannot delete value", e);
         }
     }
 }

@@ -39,18 +39,16 @@ public class DatabaseOutputStream extends DataOutputStream
         try
         {
             writeInt(databaseRecord.getKeySize());
-            //writeBytes(new String(databaseRecord.getKey(), StandardCharsets.UTF_8));
             write(databaseRecord.getKey());
 
-            if (!databaseRecord.isValuePresented())
+            if (databaseRecord.isValuePresented())
             {
-                writeInt(-1);
+                writeInt(databaseRecord.getValueSize());
+                write(databaseRecord.getValue());
             }
             else
             {
-                writeInt(databaseRecord.getValueSize());
-                //writeBytes(new String(databaseRecord.getValue(), StandardCharsets.UTF_8));
-                write(databaseRecord.getValue());
+                writeInt(-1);
             }
         }
         catch(IOException e)

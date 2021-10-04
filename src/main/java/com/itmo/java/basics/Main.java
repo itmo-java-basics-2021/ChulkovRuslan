@@ -38,44 +38,34 @@ public class Main {
                 value = "noLimit".getBytes(StandardCharsets.UTF_8);
                 db.write("children", "Alex", value);
 
-                /*String bigValue = "E:\\Projects\\TP\\databases\\value.txt";
-                Optional<String> line = Files.lines(Paths.get(bigValue)).findFirst();
-                value = line.get().getBytes(StandardCharsets.UTF_8);
-                String bigKey = "E:\\Projects\\TP\\databases\\value.txt";
-                line = Files.lines(Paths.get(bigKey)).findFirst();
-                String key = line.get();
-                db.write("children", key, value);*/
-
-                /*db.write("children", "w", value);
-                db.write("children", key, value);*/
 
                 nedValue = db.read("children", "Ruslan");
                 String answer = new String(nedValue.get(), StandardCharsets.UTF_8);
                 answer = (answer.equals("bigBoy") ? "pass" : "faild");
-                System.out.println(answer);
+                System.out.println("1: " + answer);
 
 
                 nedValue = db.read("children", "Dima");
                 answer = new String(nedValue.get(), StandardCharsets.UTF_8);
                 answer = (answer.equals("lilsBoy") ? "pass" : "faild");
-                System.out.println(answer);
+                System.out.println("2: " + answer);
 
                 db.delete("children", "Ruslan");
 
                 nedValue = db.read("children", "Ruslan");
                 answer = (nedValue.equals(Optional.empty())) ? "pass" : "fail";
-                System.out.println(answer);
+                System.out.println("3: " + answer);
                 value = "lilsBoy".getBytes(StandardCharsets.UTF_8);
                 db.write("children", "Dima", value);
 
                 nedValue = db.read("children", "Alex");
                 answer = new String(nedValue.get(), StandardCharsets.UTF_8);
                 answer = (answer.equals("noLimit") ? "pass" : "faild");
-                System.out.println(answer);
+                System.out.println("4: " + answer);
 
                 nedValue = db.read("adults", "Alex");
                 answer = (nedValue.equals(Optional.empty())) ? "pass" : "fail";
-                System.out.println(answer);
+                System.out.println("5: " + answer);
             }
             {
                 System.out.print("1. ");

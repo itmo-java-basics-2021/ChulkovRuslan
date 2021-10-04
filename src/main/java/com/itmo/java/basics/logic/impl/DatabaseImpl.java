@@ -77,7 +77,7 @@ public class DatabaseImpl implements Database
     @Override
     public void write(String tableName, String objectKey, byte[] objectValue) throws DatabaseException
     {
-        if (_table.containsKey(tableName))
+        if (tableName != null && _table.containsKey(tableName))
         {
             _table.get(tableName).write(objectKey, objectValue);
         }
@@ -90,7 +90,7 @@ public class DatabaseImpl implements Database
     @Override
     public Optional<byte[]> read(String tableName, String objectKey) throws DatabaseException
     {
-        if (_table.containsKey(tableName))
+        if (tableName != null && _table.containsKey(tableName))
         {
             return _table.get(tableName).read(objectKey);
         }
