@@ -36,9 +36,9 @@ public class TableImpl implements Table
         _tableIndex = tableIndex;
     }
 
-    private String _name;
-    private Path _tableRootPath;
-    private TableIndex _tableIndex;
+    private final String _name;
+    private final Path _tableRootPath;
+    private final TableIndex _tableIndex;
     private Segment _lastSegment;
 
     @Override

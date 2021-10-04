@@ -48,9 +48,9 @@ public class SegmentImpl implements Segment
 
     }
 
-    private String _segmentName;
-    private Path _segmentRootPath;
-    private SegmentIndex _segmentIndex;
+    private final String _segmentName;
+    private final Path _segmentRootPath;
+    private final SegmentIndex _segmentIndex;
 
     private DatabaseOutputStream DataWriter;
     private DatabaseInputStream DataReader;

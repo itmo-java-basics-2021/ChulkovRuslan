@@ -32,6 +32,7 @@ public class DatabaseImpl implements Database {
     {
         _name = dbName;
         _databaseRoot = databaseRoot.resolve(dbName);
+        _table = new HashMap<>();
 
         try
         {
@@ -41,9 +42,9 @@ public class DatabaseImpl implements Database {
         }
     }
 
-    private String _name;
-    private Path _databaseRoot;
-    private Map<String, Table> _table = new HashMap<>();
+    private final String _name;
+    private final Path _databaseRoot;
+    private Map<String, Table> _table;
 
     @Override
     public String getName() {
