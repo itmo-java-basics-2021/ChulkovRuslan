@@ -5,7 +5,6 @@ import com.itmo.java.basics.index.impl.TableIndex;
 import com.itmo.java.basics.logic.Database;
 import com.itmo.java.basics.logic.Table;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,7 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class DatabaseImpl implements Database {
+public class DatabaseImpl implements Database
+{
     private final String _name;
     private final Path _databaseRoot;
     private Map<String, Table> _table;
@@ -41,7 +41,9 @@ public class DatabaseImpl implements Database {
         try
         {
             Files.createDirectory(_databaseRoot);
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             throw new DatabaseException("Cannot create directory for database",e);
         }
     }
@@ -63,7 +65,9 @@ public class DatabaseImpl implements Database {
         try
         {
             Files.createDirectory(tableRoot);
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             throw new DatabaseException("Cannot create directory table",e);
         }
 

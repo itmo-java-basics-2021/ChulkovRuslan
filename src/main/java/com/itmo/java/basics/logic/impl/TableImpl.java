@@ -39,6 +39,7 @@ public class TableImpl implements Table
         _name = tableName;
         _tableRootPath = pathToDatabaseRoot.resolve(_name);
         _tableIndex = tableIndex;
+        _lastSegment = null;
     }
 
     @Override
@@ -49,13 +50,13 @@ public class TableImpl implements Table
     @Override
     public void write(String objectKey, byte[] objectValue) throws DatabaseException
     {
-        if(_lastSegment == null || _lastSegment.isReadOnly())
-        {
-            _lastSegment = SegmentImpl.create(SegmentImpl.createSegmentName(_name), _tableRootPath);
-        }
-
         try
         {
+            if(_lastSegment == null || _lastSegment.isReadOnly())
+            {
+                _lastSegment = SegmentImpl.create(SegmentImpl.createSegmentName(_name), _tableRootPath);
+            }
+
             _lastSegment.write(objectKey, objectValue);
         }
         catch (IOException e)
@@ -92,11 +93,12 @@ public class TableImpl implements Table
     {
         try
         {
-            if (_lastSegment == null || _lastSegment.isReadOnly())
+            /*if (_lastSegment == null || _lastSegment.isReadOnly())
             {
                 _lastSegment = SegmentImpl.create(SegmentImpl.createSegmentName(_name), _tableRootPath);
-            }
-            _lastSegment.delete(objectKey);
+            }*/
+            if (_lastSegment != null)
+                _lastSegment.delete(objectKey);
         }
         catch(IOException e)
         {
