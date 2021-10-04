@@ -31,5 +31,5 @@ public class SetDatabaseRecord implements WritableDatabaseRecord
     public int getKeySize() { return _key.length; }
 
     @Override
-    public int getValueSize() { return isValuePresented() ? _value.length : -1; }
+    public int getValueSize() { return isValuePresented() ? _value.length : 0; }
 }
