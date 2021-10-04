@@ -30,7 +30,7 @@ public class SegmentImpl implements Segment
     private WritableDatabaseRecord rec;
 
     private boolean isFull = false;
-    private final int maxSizeSegment = 10000;
+    private final int maxSizeSegment = 100000;
     private long size = 0;
 
     static Segment create(String segmentName, Path tableRootPath) throws DatabaseException
