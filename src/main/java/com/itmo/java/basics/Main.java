@@ -18,7 +18,6 @@ public class Main {
         String pathDataBase = "E:\\Projects\\TP\\databases";
         Path databaseRoot = Paths.get(pathDataBase);
 
-
         try {
             String persons = "persons";
             Database db = DatabaseImpl.create(persons, databaseRoot);
