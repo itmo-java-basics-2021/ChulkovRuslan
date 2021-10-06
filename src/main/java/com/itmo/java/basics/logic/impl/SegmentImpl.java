@@ -100,8 +100,7 @@ public class SegmentImpl implements Segment
             if (offset.isEmpty() || offset.get().getOffset() == -1)
                 return Optional.empty();
 
-            //DataReader.skip(offset.get().getOffset());
-            inputStream.skip(offset.get().getOffset());
+            DataReader.skip(offset.get().getOffset());
             Optional<DatabaseRecord> value = DataReader.readDbUnit();
 
             if (value.isEmpty() || !value.get().isValuePresented())
@@ -132,7 +131,6 @@ public class SegmentImpl implements Segment
         {
             DataWriter = new DatabaseOutputStream(outputStream);
 
-            //rec = RemoveDatabaseRecord.create(objectKey.getBytes(StandardCharsets.UTF_8));
             rec = new RemoveDatabaseRecord(objectKey.getBytes(StandardCharsets.UTF_8));
 
             _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(-1));
