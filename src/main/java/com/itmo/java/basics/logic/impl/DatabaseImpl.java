@@ -83,7 +83,9 @@ public class DatabaseImpl implements Database
         }
         else
         {
-            throw new DatabaseException("Cannot find table name");
+            //throw new DatabaseException("Cannot find table name");
+            createTableIfNotExists(tableName);
+            _table.get(tableName).write(objectKey, objectValue);
         }
     }
 
