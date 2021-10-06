@@ -10,13 +10,10 @@ import com.itmo.java.basics.logic.WritableDatabaseRecord;
 import com.itmo.java.basics.logic.io.DatabaseInputStream;
 import com.itmo.java.basics.logic.io.DatabaseOutputStream;
 
-import javax.xml.crypto.Data;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Optional;
 
 public class SegmentImpl implements Segment
@@ -27,7 +24,7 @@ public class SegmentImpl implements Segment
 
     private DatabaseOutputStream DataWriter;
     private DatabaseInputStream DataReader;
-    private WritableDatabaseRecord rec;
+    //private WritableDatabaseRecord rec;
 
     private boolean isFull = false;
     private final int maxSizeSegment = 100000;
@@ -73,7 +70,7 @@ public class SegmentImpl implements Segment
 
         try(var outputStream = new FileOutputStream(_segmentRootPath.toString(), true))
         {
-            var rec = new SetDatabaseRecord(objectKey.getBytes(StandardCharsets.UTF_8), objectValue);
+            SetDatabaseRecord rec = new SetDatabaseRecord(objectKey.getBytes(StandardCharsets.UTF_8), objectValue);
 
             _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(size));
             DataWriter = new DatabaseOutputStream(outputStream);
@@ -131,7 +128,7 @@ public class SegmentImpl implements Segment
         {
             DataWriter = new DatabaseOutputStream(outputStream);
 
-            rec = new RemoveDatabaseRecord(objectKey.getBytes(StandardCharsets.UTF_8));
+            RemoveDatabaseRecord rec = new RemoveDatabaseRecord(objectKey.getBytes(StandardCharsets.UTF_8));
 
             _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(-1));
             size += DataWriter.write(rec);

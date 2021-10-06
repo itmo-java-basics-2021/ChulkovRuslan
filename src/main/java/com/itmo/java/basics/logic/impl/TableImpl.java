@@ -88,32 +88,18 @@ public class TableImpl implements Table
     @Override
     public void delete(String objectKey) throws DatabaseException
     {
-        Optional<Segment> tempSegment = _tableIndex.searchForKey(objectKey);
-        /*try
-        {*/
-           /* if (_lastSegment == null || _lastSegment.isReadOnly())
+        try
+        {
+            if (_lastSegment == null || _lastSegment.isReadOnly())
             {
                 _lastSegment = SegmentImpl.create(SegmentImpl.createSegmentName(_name), _tableRootPath);
             }
 
-            _lastSegment.delete(objectKey);*/
-            if (tempSegment.isPresent())
-            {
-                try
-                {
-                    tempSegment.get().delete(objectKey);
-                }
-                catch(IOException e)
-                {
-                    throw new DatabaseException(e);
-                }
-            }
-
-            //_lastSegment.delete(objectKey);
-        /*}
+            _lastSegment.delete(objectKey);
+        }
         catch(IOException e)
         {
             throw new DatabaseException("Cannot delete value", e);
-        }*/
+        }
     }
 }
