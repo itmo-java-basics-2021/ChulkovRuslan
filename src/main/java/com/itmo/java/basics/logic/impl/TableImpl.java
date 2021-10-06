@@ -89,10 +89,10 @@ public class TableImpl implements Table
     {
         try
         {
-            if (_lastSegment == null || _lastSegment.isReadOnly())
+            /*if (_lastSegment == null || _lastSegment.isReadOnly())
             {
                 _lastSegment = SegmentImpl.create(SegmentImpl.createSegmentName(_name), _tableRootPath);
-            }
+            }*/
 
             _lastSegment.delete(objectKey);
             _tableIndex.onIndexedEntityUpdated(objectKey, _lastSegment);
