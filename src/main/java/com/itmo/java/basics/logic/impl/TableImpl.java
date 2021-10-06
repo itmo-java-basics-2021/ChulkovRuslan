@@ -89,8 +89,8 @@ public class TableImpl implements Table
     public void delete(String objectKey) throws DatabaseException
     {
         Optional<Segment> tempSegment = _tableIndex.searchForKey(objectKey);
-        try
-        {
+        /*try
+        {*/
            /* if (_lastSegment == null || _lastSegment.isReadOnly())
             {
                 _lastSegment = SegmentImpl.create(SegmentImpl.createSegmentName(_name), _tableRootPath);
@@ -110,10 +110,10 @@ public class TableImpl implements Table
             }
 
             //_lastSegment.delete(objectKey);
-        }
+        /*}
         catch(IOException e)
         {
             throw new DatabaseException("Cannot delete value", e);
-        }
+        }*/
     }
 }
