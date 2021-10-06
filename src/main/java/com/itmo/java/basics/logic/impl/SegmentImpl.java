@@ -25,8 +25,8 @@ public class SegmentImpl implements Segment
     private final Path _segmentRootPath;
     private final SegmentIndex _segmentIndex;
 
-    private DatabaseOutputStream DataWriter;
-    private DatabaseInputStream DataReader;
+    //private DatabaseOutputStream DataWriter;
+   // private DatabaseInputStream DataReader;
     private WritableDatabaseRecord rec;
 
     private boolean isFull = false;
@@ -73,10 +73,10 @@ public class SegmentImpl implements Segment
 
         try(var outputStream = new FileOutputStream(_segmentRootPath.toString(), true))
         {
-            var rec = new SetDatabaseRecord(objectKey.getBytes(StandardCharsets.UTF_8), objectValue);
+            rec = new SetDatabaseRecord(objectKey.getBytes(StandardCharsets.UTF_8), objectValue);
 
             _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(size));
-            DataWriter = new DatabaseOutputStream(outputStream); // ++
+            DatabaseOutputStream DataWriter = new DatabaseOutputStream(outputStream); // ++
             size += DataWriter.write(rec);
             if (size >= maxSizeSegment)
                 isFull = true;
@@ -94,7 +94,7 @@ public class SegmentImpl implements Segment
     {
         try(var inputStream = new FileInputStream(_segmentRootPath.toString()))
         {
-            DataReader = new DatabaseInputStream(inputStream);
+            DatabaseInputStream DataReader = new DatabaseInputStream(inputStream);
             Optional<SegmentOffsetInfo> offset = _segmentIndex.searchForKey(objectKey);
 
             if (offset.isEmpty() || offset.get().getOffset() == -1)
@@ -129,9 +129,8 @@ public class SegmentImpl implements Segment
 
         try(var outputStream = new FileOutputStream(_segmentRootPath.toString(), true))
         {
-            DataWriter = new DatabaseOutputStream(outputStream);
+            DatabaseOutputStream DataWriter = new DatabaseOutputStream(outputStream);
 
-            //rec = RemoveDatabaseRecord.create(objectKey.getBytes(StandardCharsets.UTF_8));
             rec = new RemoveDatabaseRecord(objectKey.getBytes(StandardCharsets.UTF_8));
 
             _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(-1));
