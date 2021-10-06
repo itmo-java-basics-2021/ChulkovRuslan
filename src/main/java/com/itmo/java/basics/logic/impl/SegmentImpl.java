@@ -24,7 +24,7 @@ public class SegmentImpl implements Segment
 
     private DatabaseOutputStream DataWriter;
     private DatabaseInputStream DataReader;
-    //private WritableDatabaseRecord rec;
+    private WritableDatabaseRecord rec;
 
     private boolean isFull = false;
     private final int maxSizeSegment = 100000;
@@ -70,7 +70,7 @@ public class SegmentImpl implements Segment
 
         try(var outputStream = new FileOutputStream(_segmentRootPath.toString(), true))
         {
-            SetDatabaseRecord rec = new SetDatabaseRecord(objectKey.getBytes(StandardCharsets.UTF_8), objectValue);
+            rec = new SetDatabaseRecord(objectKey.getBytes(StandardCharsets.UTF_8), objectValue);
 
             _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(size));
             DataWriter = new DatabaseOutputStream(outputStream);
@@ -128,7 +128,7 @@ public class SegmentImpl implements Segment
         {
             DataWriter = new DatabaseOutputStream(outputStream);
 
-            RemoveDatabaseRecord rec = new RemoveDatabaseRecord(objectKey.getBytes(StandardCharsets.UTF_8));
+            rec = new RemoveDatabaseRecord(objectKey.getBytes(StandardCharsets.UTF_8));
 
             _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(-1));
             size += DataWriter.write(rec);
