@@ -5,11 +5,9 @@ import com.itmo.java.basics.index.impl.TableIndex;
 import com.itmo.java.basics.logic.Segment;
 import com.itmo.java.basics.logic.Table;
 
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.Optional;
 
 public class TableImpl implements Table
@@ -90,14 +88,28 @@ public class TableImpl implements Table
     @Override
     public void delete(String objectKey) throws DatabaseException
     {
+        Optional<Segment> tempSegment = _tableIndex.searchForKey(objectKey);
         try
         {
-            if (_lastSegment == null || _lastSegment.isReadOnly())
+           /* if (_lastSegment == null || _lastSegment.isReadOnly())
             {
                 _lastSegment = SegmentImpl.create(SegmentImpl.createSegmentName(_name), _tableRootPath);
             }
 
-            _lastSegment.delete(objectKey);
+            _lastSegment.delete(objectKey);*/
+            if (tempSegment.isPresent())
+            {
+                try
+                {
+                    tempSegment.get().delete(objectKey);
+                }
+                catch(IOException e)
+                {
+                    throw new DatabaseException(e);
+                }
+            }
+
+            //_lastSegment.delete(objectKey);
         }
         catch(IOException e)
         {

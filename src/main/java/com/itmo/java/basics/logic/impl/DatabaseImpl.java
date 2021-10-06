@@ -72,7 +72,7 @@ public class DatabaseImpl implements Database
             throw new DatabaseException("Cannot create directory table",e);
         }
 
-        _table.put(tableName, TableImpl.create(tableName, tableRoot, new TableIndex()));
+        _table.put(tableName, TableImpl.create(tableName, _databaseRoot, new TableIndex()));
     }
 
     @Override
