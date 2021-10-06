@@ -7,9 +7,6 @@ public class SetDatabaseRecord implements WritableDatabaseRecord
     private final byte[] _key;
     private final byte[] _value;
 
-    //public static WritableDatabaseRecord create(byte[] objectKey, byte[] objectValue) { return new SetDatabaseRecord(objectKey, objectValue); }
-
-    //private SetDatabaseRecord(byte[] objectKey, byte[] objectValue)
     public SetDatabaseRecord(byte[] objectKey, byte[] objectValue)
     {
         _key = objectKey;
@@ -31,5 +28,5 @@ public class SetDatabaseRecord implements WritableDatabaseRecord
     public int getKeySize() { return _key.length; }
 
     @Override
-    public int getValueSize() { return isValuePresented() ? _value.length : -1; }
+    public int getValueSize() { return isValuePresented() ? _value.length : 0; }
 }

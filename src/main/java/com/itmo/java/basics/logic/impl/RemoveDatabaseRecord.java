@@ -30,5 +30,5 @@ public class RemoveDatabaseRecord implements WritableDatabaseRecord
     public int getKeySize() { return _key.length; }
 
     @Override
-    public int getValueSize() { return 0; }
+    public int getValueSize() { return -1; }
 }
