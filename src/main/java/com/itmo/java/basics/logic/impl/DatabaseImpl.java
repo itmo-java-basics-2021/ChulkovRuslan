@@ -18,7 +18,8 @@ public class DatabaseImpl implements Database
     private final Path _databaseRoot;
     private Map<String, Table> _table;
 
-    public static Database create(String dbName, Path databaseRoot) throws DatabaseException {
+    public static Database create(String dbName, Path databaseRoot) throws DatabaseException
+    {
         if (dbName == null)
         {
             throw new DatabaseException("Name is null");
@@ -28,6 +29,12 @@ public class DatabaseImpl implements Database
         {
             throw new DatabaseException("databaseRoot is null");
         }
+
+        if (!Files.exists(databaseRoot))
+            throw new DatabaseException("qwewqe");
+
+        if(!Files.isDirectory(databaseRoot))
+            throw new DatabaseException("qwewqe");
 
         return new DatabaseImpl(dbName, databaseRoot);
     }
