@@ -6,8 +6,12 @@ import java.nio.charset.StandardCharsets;
 
 public class RemoveDatabaseRecord implements WritableDatabaseRecord
 {
+
     private final byte[] _key;
 
+    //public static WritableDatabaseRecord create(byte[] objectKey) { return new RemoveDatabaseRecord(objectKey); }
+
+    //private RemoveDatabaseRecord(byte[] objectKey) { _key = objectKey; }
     public RemoveDatabaseRecord(byte[] objectKey) { _key = objectKey; }
 
     @Override

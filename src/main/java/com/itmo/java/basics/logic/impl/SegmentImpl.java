@@ -76,7 +76,7 @@ public class SegmentImpl implements Segment
             var rec = new SetDatabaseRecord(objectKey.getBytes(StandardCharsets.UTF_8), objectValue);
 
             _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(size));
-            DataWriter = new DatabaseOutputStream(outputStream);
+            DataWriter = new DatabaseOutputStream(outputStream); // ++
             size += DataWriter.write(rec);
             if (size >= maxSizeSegment)
                 isFull = true;
@@ -100,7 +100,7 @@ public class SegmentImpl implements Segment
             if (offset.isEmpty() || offset.get().getOffset() == -1)
                 return Optional.empty();
 
-            inputStream.skip(offset.get().getOffset());
+            DataReader.skip(offset.get().getOffset());
             Optional<DatabaseRecord> value = DataReader.readDbUnit();
 
             if (value.isEmpty() || !value.get().isValuePresented())
