@@ -69,13 +69,13 @@ public class TableImpl implements Table
         try
         {
             Optional<Segment> segment = _tableIndex.searchForKey(objectKey);
-            if (segment.isPresent())
+            if (!segment.isPresent())
             {
-                return segment.get().read(objectKey);
+                return Optional.empty();
             }
             else
             {
-                return Optional.empty();
+                return segment.get().read(objectKey);
             }
         }
         catch (IOException e)
@@ -89,10 +89,10 @@ public class TableImpl implements Table
     {
         try
         {
-            /*if (_lastSegment == null || _lastSegment.isReadOnly())
+            if (_lastSegment == null || _lastSegment.isReadOnly())
             {
                 _lastSegment = SegmentImpl.create(SegmentImpl.createSegmentName(_name), _tableRootPath);
-            }*/
+            }
 
             _lastSegment.delete(objectKey);
             _tableIndex.onIndexedEntityUpdated(objectKey, _lastSegment);
