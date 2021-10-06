@@ -72,7 +72,7 @@ public class TableImpl implements Table
         try
         {
             Optional<Segment> segment = _tableIndex.searchForKey(objectKey);
-            if (segment.isPresent())
+            if (segment.isEmpty())
             {
                 return segment.get().read(objectKey);
             }
