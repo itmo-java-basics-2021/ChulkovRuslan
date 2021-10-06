@@ -25,8 +25,8 @@ public class SegmentImpl implements Segment
     private final Path _segmentRootPath;
     private final SegmentIndex _segmentIndex;
 
-    //private DatabaseOutputStream DataWriter;
-   // private DatabaseInputStream DataReader;
+    private DatabaseOutputStream DataWriter;
+    private DatabaseInputStream DataReader;
     private WritableDatabaseRecord rec;
 
     private boolean isFull = false;
@@ -76,8 +76,9 @@ public class SegmentImpl implements Segment
             rec = new SetDatabaseRecord(objectKey.getBytes(StandardCharsets.UTF_8), objectValue);
 
             _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(size));
-            DatabaseOutputStream DataWriter = new DatabaseOutputStream(outputStream); // ++
+            DataWriter = new DatabaseOutputStream(outputStream);
             size += DataWriter.write(rec);
+
             if (size >= maxSizeSegment)
                 isFull = true;
         }
@@ -129,11 +130,11 @@ public class SegmentImpl implements Segment
 
         try(var outputStream = new FileOutputStream(_segmentRootPath.toString(), true))
         {
-            DatabaseOutputStream DataWriter = new DatabaseOutputStream(outputStream);
-
             rec = new RemoveDatabaseRecord(objectKey.getBytes(StandardCharsets.UTF_8));
 
             _segmentIndex.onIndexedEntityUpdated(objectKey, new SegmentOffsetInfoImpl(-1));
+            DataWriter = new DatabaseOutputStream(outputStream);
+
             size += DataWriter.write(rec);
             if (size >= maxSizeSegment){
                 isFull = true;

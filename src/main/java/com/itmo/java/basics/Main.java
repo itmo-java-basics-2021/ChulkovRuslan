@@ -37,6 +37,15 @@ public class Main {
                 value = "noLimit".getBytes(StandardCharsets.UTF_8);
                 db.write("children", "Alex", value);
 
+                String bigValue = "E:\\Projects\\TP\\databases\\value.txt";
+                Optional<String> line = Files.lines(Paths.get(bigValue)).findFirst();
+                value = line.get().getBytes(StandardCharsets.UTF_8);
+                String bigKey = "E:\\Projects\\TP\\databases\\value.txt";
+                line = Files.lines(Paths.get(bigKey)).findFirst();
+                String key = line.get();
+                db.write("children", key, value);
+
+                var testA = db.read("children", key);
 
                 nedValue = db.read("children", "Ruslan");
                 String answer = new String(nedValue.get(), StandardCharsets.UTF_8);
