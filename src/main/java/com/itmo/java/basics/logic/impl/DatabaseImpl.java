@@ -30,12 +30,6 @@ public class DatabaseImpl implements Database
             throw new DatabaseException("databaseRoot is null");
         }
 
-        if (!Files.exists(databaseRoot))
-            throw new DatabaseException("qwewqe");
-
-        if(!Files.isDirectory(databaseRoot))
-            throw new DatabaseException("qwewqe");
-
         return new DatabaseImpl(dbName, databaseRoot);
     }
 
@@ -78,7 +72,7 @@ public class DatabaseImpl implements Database
             throw new DatabaseException("Cannot create directory table",e);
         }
 
-        _table.put(tableName, TableImpl.create(tableName, _databaseRoot, new TableIndex()));
+        _table.put(tableName, TableImpl.create(tableName, tableRoot, new TableIndex()));
     }
 
     @Override
