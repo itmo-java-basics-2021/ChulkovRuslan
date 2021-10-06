@@ -95,6 +95,7 @@ public class TableImpl implements Table
             }
 
             _lastSegment.delete(objectKey);
+            _tableIndex.onIndexedEntityUpdated(objectKey, _lastSegment);
         }
         catch(IOException e)
         {
